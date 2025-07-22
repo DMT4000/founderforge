@@ -1,0 +1,11 @@
+{
+  "enable_memory_system": true,
+  "enable_multi_agent": true,
+  "enable_context_summarization": true,
+  "enable_confidence_fallback": true,
+  "enable_git_versioning": true,
+  "enable_security_filters": true,
+  "max_context_tokens": 16000,
+  "confidence_threshold": 0.8,
+  "memory_retention_days": 30
+}

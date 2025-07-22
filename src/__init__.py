@@ -1,0 +1,1 @@
+# FounderForge AI Cofounder - Core Package

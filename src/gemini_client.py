@@ -2,7 +2,7 @@
 
 import time
 import logging
-from logging_manager import get_logging_manager, LogLevel, LogCategory
+from .logging_manager import get_logging_manager, LogLevel, LogCategory
 from typing import Optional, Dict, Any, List
 from dataclasses import dataclass
 from enum import Enum

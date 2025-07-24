@@ -2,7 +2,7 @@
 
 import re
 import logging
-from logging_manager import get_logging_manager, LogLevel, LogCategory
+from .logging_manager import get_logging_manager, LogLevel, LogCategory
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
 from enum import Enum

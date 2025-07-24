@@ -2,7 +2,7 @@
 
 import json
 import logging
-from logging_manager import get_logging_manager, LogLevel, LogCategory
+from .logging_manager import get_logging_manager, LogLevel, LogCategory
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, Optional, List

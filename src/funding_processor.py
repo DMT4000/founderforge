@@ -5,7 +5,7 @@ Implements specialized validation and processing for funding applications.
 
 import json
 import logging
-from logging_manager import get_logging_manager, LogLevel, LogCategory
+from .logging_manager import get_logging_manager, LogLevel, LogCategory
 import time
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple

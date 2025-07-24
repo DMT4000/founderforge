@@ -11,6 +11,11 @@ from typing import Dict, List, Optional, Any
 import uuid
 import asyncio
 import time
+import sys
+from pathlib import Path
+
+# Add src directory to Python path
+sys.path.append(str(Path(__file__).resolve().parent / "src"))
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

@@ -6,7 +6,7 @@ Uses sentence-transformers for local document embedding and FAISS for efficient 
 import os
 import pickle
 import logging
-from logging_manager import get_logging_manager, LogLevel, LogCategory
+from .logging_manager import get_logging_manager, LogLevel, LogCategory
 import numpy as np
 from typing import List, Dict, Any, Optional, Tuple
 from pathlib import Path

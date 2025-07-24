@@ -5,7 +5,7 @@ Implements Orchestrator, Validator, Planner, Tool-Caller, and Coach agents.
 
 import json
 import logging
-from logging_manager import get_logging_manager, LogLevel, LogCategory
+from .logging_manager import get_logging_manager, LogLevel, LogCategory
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field

@@ -9,7 +9,7 @@ import json
 import time
 import asyncio
 import logging
-from logging_manager import get_logging_manager, LogLevel, LogCategory
+from .logging_manager import get_logging_manager, LogLevel, LogCategory
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, asdict
 from enum import Enum

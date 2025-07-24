@@ -5,7 +5,7 @@ Implements high-performance memory retrieval and management with confirmation pr
 
 import sqlite3
 import logging
-from logging_manager import get_logging_manager, LogLevel, LogCategory
+from .logging_manager import get_logging_manager, LogLevel, LogCategory
 import time
 from typing import List, Optional, Dict, Any, Tuple
 from datetime import datetime, timedelta

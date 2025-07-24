@@ -3,7 +3,7 @@
 import os
 import json
 import logging
-from logging_manager import get_logging_manager, LogLevel, LogCategory
+from .logging_manager import get_logging_manager, LogLevel, LogCategory
 import subprocess
 from datetime import datetime
 from pathlib import Path

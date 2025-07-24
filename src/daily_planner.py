@@ -5,7 +5,7 @@ Chains Planner, Tool-Caller, and Coach agents for personalized action plan gener
 
 import json
 import logging
-from logging_manager import get_logging_manager, LogLevel, LogCategory
+from .logging_manager import get_logging_manager, LogLevel, LogCategory
 import time
 import asyncio
 from pathlib import Path

@@ -1,0 +1,138 @@
+{
+  "funding_form_validation": {
+    "required_fields": [
+      {
+        "field": "company_name",
+        "type": "string",
+        "min_length": 2,
+        "max_length": 100,
+        "description": "Company or project name"
+      },
+      {
+        "field": "funding_amount",
+        "type": "number",
+        "min_value": 1000,
+        "max_value": 100000000,
+        "description": "Requested funding amount in USD"
+      },
+      {
+        "field": "business_plan",
+        "type": "string",
+        "min_length": 100,
+        "max_length": 5000,
+        "description": "Business plan or executive summary"
+      },
+      {
+        "field": "team_experience",
+        "type": "string",
+        "min_length": 50,
+        "max_length": 2000,
+        "description": "Team background and experience"
+      },
+      {
+        "field": "market_size",
+        "type": "string",
+        "min_length": 20,
+        "max_length": 1000,
+        "description": "Target market size and opportunity"
+      }
+    ],
+    "optional_fields": [
+      {
+        "field": "revenue",
+        "type": "number",
+        "min_value": 0,
+        "description": "Current annual revenue"
+      },
+      {
+        "field": "customers",
+        "type": "number",
+        "min_value": 0,
+        "description": "Number of customers"
+      },
+      {
+        "field": "growth_rate",
+        "type": "number",
+        "min_value": -100,
+        "max_value": 1000,
+        "description": "Monthly growth rate percentage"
+      },
+      {
+        "field": "competition",
+        "type": "string",
+        "max_length": 1000,
+        "description": "Competitive landscape analysis"
+      },
+      {
+        "field": "use_of_funds",
+        "type": "string",
+        "max_length": 2000,
+        "description": "How funding will be used"
+      }
+    ],
+    "business_rules": [
+      {
+        "rule_id": "funding_amount_reasonable",
+        "description": "Funding amount should be reasonable for business stage",
+        "logic": "if stage == 'idea' then funding_amount <= 500000 else if stage == 'mvp' then funding_amount <= 2000000 else funding_amount <= 10000000"
+      },
+      {
+        "rule_id": "team_size_funding_ratio",
+        "description": "Team size should be appropriate for funding amount",
+        "logic": "funding_amount / team_size should be between 50000 and 500000"
+      },
+      {
+        "rule_id": "revenue_growth_consistency",
+        "description": "Revenue and growth rate should be consistent",
+        "logic": "if revenue > 0 then growth_rate should be provided"
+      }
+    ],
+    "scoring_criteria": [
+      {
+        "category": "team",
+        "weight": 0.25,
+        "factors": ["team_experience", "team_size", "founder_background"]
+      },
+      {
+        "category": "market",
+        "weight": 0.25,
+        "factors": ["market_size", "competition", "market_timing"]
+      },
+      {
+        "category": "product",
+        "weight": 0.25,
+        "factors": ["business_plan", "mvp_status", "customer_validation"]
+      },
+      {
+        "category": "financials",
+        "weight": 0.25,
+        "factors": ["funding_amount", "revenue", "growth_rate", "use_of_funds"]
+      }
+    ],
+    "risk_factors": [
+      {
+        "factor": "high_funding_no_revenue",
+        "condition": "funding_amount > 1000000 and revenue == 0",
+        "risk_level": "high",
+        "message": "High funding request with no current revenue"
+      },
+      {
+        "factor": "small_team_large_funding",
+        "condition": "team_size < 3 and funding_amount > 2000000",
+        "risk_level": "medium",
+        "message": "Large funding request for small team"
+      },
+      {
+        "factor": "vague_business_plan",
+        "condition": "business_plan.length < 200",
+        "risk_level": "medium",
+        "message": "Business plan lacks sufficient detail"
+      }
+    ]
+  },
+  "processing_targets": {
+    "max_processing_time_seconds": 30,
+    "target_accuracy_percentage": 95,
+    "confidence_threshold": 0.8
+  }
+}

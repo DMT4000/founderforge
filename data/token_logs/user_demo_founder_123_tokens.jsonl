@@ -1,0 +1,6 @@
+{"timestamp": "2025-07-21T23:39:44.905544", "user_id": "demo_founder_123", "operation": "context_assembly", "prompt_tokens": 1200, "completion_tokens": 0, "total_tokens": 1200}
+{"timestamp": "2025-07-21T23:39:44.906288", "user_id": "demo_founder_123", "operation": "ai_response", "prompt_tokens": 1200, "completion_tokens": 300, "total_tokens": 1500}
+{"timestamp": "2025-07-21T23:39:44.906747", "user_id": "demo_founder_123", "operation": "summarization", "prompt_tokens": 800, "completion_tokens": 200, "total_tokens": 1000}
+{"timestamp": "2025-07-21T23:39:44.907152", "user_id": "demo_founder_123", "operation": "context_assembly", "prompt_tokens": 1100, "completion_tokens": 0, "total_tokens": 1100}
+{"timestamp": "2025-07-21T23:39:44.908110", "user_id": "demo_founder_123", "operation": "ai_response", "prompt_tokens": 1100, "completion_tokens": 250, "total_tokens": 1350}
+{"timestamp": "2025-07-21T23:39:44.910783", "user_id": "demo_founder_123", "operation": "context_summarization", "prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0}

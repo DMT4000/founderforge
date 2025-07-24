@@ -1,0 +1,3 @@
+{"timestamp": "2025-07-22T00:06:21.540531", "agent_name": "test_agent", "action": "orchestrate_workflow", "execution_time": 4.5299530029296875e-05, "success": true, "error_message": "", "input_data_size": 61, "output_data_size": 144}
+{"timestamp": "2025-07-22T00:06:21.541133", "agent_name": "test_agent", "action": "orchestrate_workflow", "execution_time": 0.0006442070007324219, "success": false, "error_message": "Orchestration failed: 'AgentLog' object has no attribute 'to_dict'", "input_data_size": 30, "output_data_size": 2}
+{"timestamp": "2025-07-22T00:06:56.529105", "agent_name": "test_agent", "action": "orchestrate_workflow", "execution_time": 4.3392181396484375e-05, "success": true, "error_message": "", "input_data_size": 61, "output_data_size": 144}

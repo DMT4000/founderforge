@@ -1,0 +1,27 @@
+{
+  "funding_types": {
+    "bootstrapping": {
+      "description": "Self-funded startup using personal savings or revenue",
+      "pros": ["Full control", "No equity dilution", "Faster decisions"],
+      "cons": ["Limited resources", "Personal financial risk", "Slower growth"]
+    },
+    "angel_investment": {
+      "description": "Investment from high-net-worth individuals",
+      "typical_range": "$25K - $100K",
+      "pros": ["Mentorship", "Network access", "Industry expertise"],
+      "cons": ["Equity dilution", "Investor expectations", "Due diligence requirements"]
+    },
+    "venture_capital": {
+      "description": "Professional investment firms funding high-growth startups",
+      "typical_range": "$1M - $50M+",
+      "pros": ["Large funding amounts", "Strategic guidance", "Network effects"],
+      "cons": ["Significant equity dilution", "Board control", "High growth pressure"]
+    },
+    "crowdfunding": {
+      "description": "Raising small amounts from many people online",
+      "platforms": ["Kickstarter", "Indiegogo", "Republic"],
+      "pros": ["Market validation", "Customer acquisition", "No equity required"],
+      "cons": ["Public exposure", "Fulfillment obligations", "Platform fees"]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "messages": [
+    {
+      "id": "f2ddee83-5a54-4bb8-9818-27c57b2767b5",
+      "content": "Hi, I need help with our Series B preparation",
+      "role": "user",
+      "timestamp": "2025-07-21T23:39:44.864699",
+      "token_count": 0
+    },
+    {
+      "id": "7174dbe4-d221-454c-a9ee-fdbe721a1230",
+      "content": "I'd be happy to help with Series B preparation. What specific areas would you like to focus on?",
+      "role": "assistant",
+      "timestamp": "2025-07-21T23:39:44.864718",
+      "token_count": 0
+    },
+    {
+      "id": "b8b9936f-dceb-4e3f-a109-301316f85b63",
+      "content": "We're struggling with our pitch deck and financial projections",
+      "role": "user",
+      "timestamp": "2025-07-21T23:39:44.864722",
+      "token_count": 0
+    },
+    {
+      "id": "34b16d7e-7ad4-4cbe-af82-0beddf676333",
+      "content": "Let's start with your financial projections. What's your current revenue run rate?",
+      "role": "assistant",
+      "timestamp": "2025-07-21T23:39:44.864725",
+      "token_count": 0
+    },
+    {
+      "id": "a2064cf0-3ffb-4475-aaeb-d8126d8dfe41",
+      "content": "We're at $150K MRR with 25% month-over-month growth",
+      "role": "user",
+      "timestamp": "2025-07-21T23:39:44.864727",
+      "token_count": 0
+    },
+    {
+      "id": "77d9a507-db54-4ad8-9d00-2f56606b8e5b",
+      "content": "That's strong growth! For Series B, investors will want to see a clear path to $1M ARR. Let's work on your growth strategy.",
+      "role": "assistant",
+      "timestamp": "2025-07-21T23:39:44.864729",
+      "token_count": 0
+    }
+  ]
+}

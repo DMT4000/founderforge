@@ -1,0 +1,25 @@
+{
+  "messages": [
+    {
+      "id": "b55d151f-d00f-4810-a1e2-f84bac17cba8",
+      "content": "I need help with my pitch deck",
+      "role": "user",
+      "timestamp": "2025-07-21T23:39:44.912520",
+      "token_count": 0
+    },
+    {
+      "id": "85f413ef-79c2-4fbe-902c-4a13824578f8",
+      "content": "I can help with that. What's your main value proposition?",
+      "role": "assistant",
+      "timestamp": "2025-07-21T23:39:44.912530",
+      "token_count": 0
+    },
+    {
+      "id": "4264a5ad-47ec-4f4b-9fe4-ce0b11722a9c",
+      "content": "We use AI to automate medical record analysis",
+      "role": "user",
+      "timestamp": "2025-07-21T23:39:44.912537",
+      "token_count": 0
+    }
+  ]
+}

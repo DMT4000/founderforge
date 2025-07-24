@@ -21,9 +21,9 @@ from pathlib import Path
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from system_integration import initialize_system, get_system_status, shutdown_system, export_system_metrics
-from logging_manager import log_info, log_error, log_performance, log_token_usage, log_audit
-from performance_monitor import record_response_time, record_accuracy, record_error_rate, record_database_performance
+from src.system_integration import initialize_system, get_system_status, shutdown_system, export_system_metrics
+from src.logging_manager import log_info, log_error, log_performance, log_token_usage, log_audit
+from src.performance_monitor import record_response_time, record_accuracy, record_error_rate, record_database_performance
 
 
 def test_logging_system():

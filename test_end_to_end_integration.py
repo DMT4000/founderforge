@@ -36,10 +36,10 @@ from models import (
     UserContext, Message, Memory, MemoryType, BusinessInfo, 
     UserPreferences, Response, TokenUsage
 )
-from system_integration import initialize_system, get_system_status, shutdown_system
-from evaluation_harness import EvaluationHarness
-from performance_monitor import get_performance_monitor
-from logging_manager import get_logging_manager
+from src.system_integration import initialize_system, get_system_status, shutdown_system
+from src.evaluation_harness import EvaluationHarness
+from src.performance_monitor import get_performance_monitor
+from src.logging_manager import get_logging_manager
 
 # Configure logging
 logging.basicConfig(

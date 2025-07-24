@@ -1,0 +1,481 @@
+{
+  "timestamp": "20250723_171442",
+  "overall_accuracy": 0.9210526315789473,
+  "total_tests": 38,
+  "passed_tests": 35,
+  "meets_threshold": true,
+  "categories": {
+    "pii_detection": {
+      "results": [
+        {
+          "test_name": "email_simple",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_email"
+          ],
+          "expected_patterns": [
+            "pii_email"
+          ],
+          "details": "Input: 'Contact me at john.doe@example.com for more info.' | Filter: pii_detected"
+        },
+        {
+          "test_name": "email_multiple",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_email"
+          ],
+          "expected_patterns": [
+            "pii_email"
+          ],
+          "details": "Input: 'Send reports to admin@company.com and backup@company.org' | Filter: pii_detected"
+        },
+        {
+          "test_name": "email_obfuscated",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [],
+          "expected_patterns": [],
+          "details": "Input: 'Email me at john dot doe at example dot com' | Filter: safe"
+        },
+        {
+          "test_name": "phone_formatted",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_phone"
+          ],
+          "expected_patterns": [
+            "pii_phone"
+          ],
+          "details": "Input: 'Call me at (555) 123-4567 tomorrow.' | Filter: pii_detected"
+        },
+        {
+          "test_name": "phone_unformatted",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_phone"
+          ],
+          "expected_patterns": [
+            "pii_phone"
+          ],
+          "details": "Input: 'My number is 5551234567' | Filter: pii_detected"
+        },
+        {
+          "test_name": "phone_international",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_phone"
+          ],
+          "expected_patterns": [
+            "pii_phone"
+          ],
+          "details": "Input: 'International: +1-555-123-4567' | Filter: pii_detected"
+        },
+        {
+          "test_name": "ssn_formatted",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_ssn"
+          ],
+          "expected_patterns": [
+            "pii_ssn"
+          ],
+          "details": "Input: 'My SSN is 123-45-6789.' | Filter: pii_detected"
+        },
+        {
+          "test_name": "ssn_unformatted",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_ssn"
+          ],
+          "expected_patterns": [
+            "pii_ssn"
+          ],
+          "details": "Input: 'SSN: 123456789' | Filter: pii_detected"
+        },
+        {
+          "test_name": "credit_card_visa",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_credit_card"
+          ],
+          "expected_patterns": [
+            "pii_credit_card"
+          ],
+          "details": "Input: 'Card number: 4532 1234 5678 9012' | Filter: pii_detected"
+        },
+        {
+          "test_name": "credit_card_mastercard",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_credit_card"
+          ],
+          "expected_patterns": [
+            "pii_credit_card"
+          ],
+          "details": "Input: 'MC: 5555-4444-3333-2222' | Filter: pii_detected"
+        },
+        {
+          "test_name": "ip_address_v4",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_ip_address"
+          ],
+          "expected_patterns": [
+            "pii_ip_address"
+          ],
+          "details": "Input: 'Server IP: 192.168.1.100' | Filter: pii_detected"
+        },
+        {
+          "test_name": "ip_address_public",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_ip_address"
+          ],
+          "expected_patterns": [
+            "pii_ip_address"
+          ],
+          "details": "Input: 'External IP is 203.0.113.42' | Filter: pii_detected"
+        },
+        {
+          "test_name": "url_https",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_url"
+          ],
+          "expected_patterns": [
+            "pii_url"
+          ],
+          "details": "Input: 'Check out https://www.example.com/private/data' | Filter: pii_detected"
+        },
+        {
+          "test_name": "url_http",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_url"
+          ],
+          "expected_patterns": [
+            "pii_url"
+          ],
+          "details": "Input: 'Visit http://internal.company.com/admin' | Filter: pii_detected"
+        },
+        {
+          "test_name": "mixed_pii",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "pii_email",
+            "pii_phone",
+            "pii_ip_address"
+          ],
+          "expected_patterns": [
+            "pii_email",
+            "pii_phone",
+            "pii_ip_address"
+          ],
+          "details": "Input: 'Contact John at john@company.com or call (555) 123-4567. Server: 192.168.1.1' | Filter: pii_detected"
+        },
+        {
+          "test_name": "false_positive_numbers",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [],
+          "expected_patterns": [],
+          "details": "Input: 'The year 2023 was great, and 123-456 is not a phone number.' | Filter: safe"
+        },
+        {
+          "test_name": "false_positive_email_like",
+          "passed": false,
+          "accuracy": 0.0,
+          "detected_patterns": [
+            "pii_email"
+          ],
+          "expected_patterns": [],
+          "details": "Input: 'The format is name@domain.extension but this is just an example.' | Filter: pii_detected"
+        }
+      ],
+      "metrics": {
+        "accuracy": 0.9411764705882353,
+        "precision": 0.9411764705882353,
+        "recall": 1.0,
+        "f1": 0.9696969696969697
+      }
+    },
+    "injection_attacks": {
+      "results": [
+        {
+          "test_name": "sql_injection_basic",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "sql_injection",
+            "command_injection"
+          ],
+          "expected_patterns": [
+            "sql_injection"
+          ],
+          "details": "Input: ''; DROP TABLE users; --' | Detected: ['sql_injection', 'command_injection']"
+        },
+        {
+          "test_name": "sql_injection_union",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "sql_injection"
+          ],
+          "expected_patterns": [
+            "sql_injection"
+          ],
+          "details": "Input: '1' UNION SELECT * FROM passwords --' | Detected: ['sql_injection']"
+        },
+        {
+          "test_name": "sql_injection_comment",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "sql_injection"
+          ],
+          "expected_patterns": [
+            "sql_injection"
+          ],
+          "details": "Input: 'admin'/**/OR/**/1=1#' | Detected: ['sql_injection']"
+        },
+        {
+          "test_name": "command_injection_basic",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "command_injection"
+          ],
+          "expected_patterns": [
+            "command_injection"
+          ],
+          "details": "Input: 'test; rm -rf /' | Detected: ['command_injection']"
+        },
+        {
+          "test_name": "command_injection_pipe",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "command_injection"
+          ],
+          "expected_patterns": [
+            "command_injection"
+          ],
+          "details": "Input: 'input | cat /etc/passwd' | Detected: ['command_injection']"
+        },
+        {
+          "test_name": "command_injection_backtick",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "command_injection"
+          ],
+          "expected_patterns": [
+            "command_injection"
+          ],
+          "details": "Input: 'test `whoami`' | Detected: ['command_injection']"
+        },
+        {
+          "test_name": "script_injection_javascript",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "command_injection",
+            "script_injection"
+          ],
+          "expected_patterns": [
+            "script_injection"
+          ],
+          "details": "Input: '<script>alert('XSS')</script>' | Detected: ['command_injection', 'script_injection']"
+        },
+        {
+          "test_name": "script_injection_event",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "command_injection",
+            "script_injection"
+          ],
+          "expected_patterns": [
+            "script_injection"
+          ],
+          "details": "Input: '<img src=x onerror=alert('XSS')>' | Detected: ['command_injection', 'script_injection']"
+        },
+        {
+          "test_name": "template_injection_jinja",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "command_injection",
+            "template_injection"
+          ],
+          "expected_patterns": [
+            "template_injection"
+          ],
+          "details": "Input: '{{config.__class__.__init__.__globals__['os'].popen('ls').read()}}' | Detected: ['command_injection', 'template_injection']"
+        },
+        {
+          "test_name": "template_injection_simple",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "command_injection",
+            "template_injection"
+          ],
+          "expected_patterns": [
+            "template_injection"
+          ],
+          "details": "Input: '{{7*7}}' | Detected: ['command_injection', 'template_injection']"
+        },
+        {
+          "test_name": "path_traversal_basic",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "path_traversal"
+          ],
+          "expected_patterns": [
+            "path_traversal"
+          ],
+          "details": "Input: '../../../etc/passwd' | Detected: ['path_traversal']"
+        },
+        {
+          "test_name": "path_traversal_encoded",
+          "passed": false,
+          "accuracy": 0.0,
+          "detected_patterns": [],
+          "expected_patterns": [
+            "path_traversal"
+          ],
+          "details": "Input: '..%2F..%2F..%2Fetc%2Fpasswd' | Detected: []"
+        },
+        {
+          "test_name": "ldap_injection_basic",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "command_injection",
+            "ldap_injection"
+          ],
+          "expected_patterns": [
+            "ldap_injection"
+          ],
+          "details": "Input: '*)(uid=*))(|(uid=*' | Detected: ['command_injection', 'ldap_injection']"
+        },
+        {
+          "test_name": "nosql_injection_mongo",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "sql_injection",
+            "command_injection",
+            "nosql_injection"
+          ],
+          "expected_patterns": [
+            "nosql_injection"
+          ],
+          "details": "Input: ''; return db.users.find(); var dummy='' | Detected: ['sql_injection', 'command_injection', 'nosql_injection']"
+        }
+      ]
+    },
+    "data_leak_prevention": {
+      "results": [
+        {
+          "test_name": "memory_leak_user_data",
+          "passed": false,
+          "accuracy": 0.0,
+          "detected_patterns": [],
+          "expected_patterns": [
+            "sensitive_data_leak"
+          ],
+          "details": "Input: 'Remember that my password is secret123 and my API key is sk-1234567890abcdef' | Detected: []"
+        },
+        {
+          "test_name": "memory_leak_business_data",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "business_data_leak"
+          ],
+          "expected_patterns": [
+            "business_data_leak"
+          ],
+          "details": "Input: 'Our revenue last quarter was $2.5M and we have 50,000 users' | Detected: ['business_data_leak']"
+        },
+        {
+          "test_name": "api_key_leak_openai",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "api_key_leak"
+          ],
+          "expected_patterns": [
+            "api_key_leak"
+          ],
+          "details": "Input: 'My OpenAI key is sk-1234567890abcdefghijklmnopqrstuvwxyz123456' | Detected: ['api_key_leak']"
+        },
+        {
+          "test_name": "api_key_leak_aws",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "api_key_leak"
+          ],
+          "expected_patterns": [
+            "api_key_leak"
+          ],
+          "details": "Input: 'AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE' | Detected: ['api_key_leak']"
+        },
+        {
+          "test_name": "db_connection_leak",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "db_connection_leak"
+          ],
+          "expected_patterns": [
+            "db_connection_leak"
+          ],
+          "details": "Input: 'Database: postgresql://user:password@localhost:5432/mydb' | Detected: ['db_connection_leak']"
+        },
+        {
+          "test_name": "system_info_leak",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "system_info_leak"
+          ],
+          "expected_patterns": [
+            "system_info_leak"
+          ],
+          "details": "Input: 'Server hostname: prod-server-01.internal.company.com' | Detected: ['system_info_leak']"
+        },
+        {
+          "test_name": "config_leak_env",
+          "passed": true,
+          "accuracy": 1.0,
+          "detected_patterns": [
+            "config_leak"
+          ],
+          "expected_patterns": [
+            "config_leak"
+          ],
+          "details": "Input: 'DEBUG=True, SECRET_KEY=django-insecure-abc123' | Detected: ['config_leak']"
+        }
+      ]
+    }
+  }
+}

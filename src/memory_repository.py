@@ -5,6 +5,7 @@ Implements high-performance memory retrieval and management with confirmation pr
 
 import sqlite3
 import logging
+from logging_manager import get_logging_manager, LogLevel, LogCategory
 import time
 from typing import List, Optional, Dict, Any, Tuple
 from datetime import datetime, timedelta
@@ -25,7 +26,7 @@ class MemoryRepository:
             db_manager: Database manager instance (uses global if None)
         """
         self.db_manager = db_manager or get_db_manager()
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logging_manager().get_logger(__name__.split(".")[-1], LogCategory.SYSTEM)
         
         # Performance tracking
         self._query_times: List[float] = []

@@ -1,0 +1,53 @@
+{
+  "integration-test-20250723-165321": {
+    "branch_name": "experiment/t2/integration-test-20250723-165321",
+    "created_at": "2025-07-23T16:53:21.704855",
+    "created_by": "integration_test",
+    "description": "Integration test for Git prompt management",
+    "experiment_id": "integration-test-20250723-165321",
+    "experiment_type": "T2",
+    "metrics": {
+      "commits_made": 1,
+      "integration_test": true,
+      "prompts_created": 1,
+      "test_passed": true
+    },
+    "prompt_changes": [
+      {
+        "change_type": "new",
+        "description": "Added integration test prompt",
+        "new_content": "You are an AI assistant helping with integration testing.\n\nYour role is to:\n- Verify system functionality\n- Provide clear feedback\n- Ensure all components work together\n\nThis is a test prompt created during integration testing.",
+        "old_content": "",
+        "prompt_id": "integration_test_prompt",
+        "timestamp": "2025-07-23T16:53:21.878853"
+      }
+    ],
+    "status": "completed"
+  },
+  "rollback-test-20250723-165322": {
+    "branch_name": "experiment/t2/rollback-test-20250723-165322",
+    "created_at": "2025-07-23T16:53:22.094567",
+    "created_by": "system",
+    "description": "Test rollback functionality",
+    "experiment_id": "rollback-test-20250723-165322",
+    "experiment_type": "T2",
+    "metrics": {},
+    "prompt_changes": [],
+    "status": "rolled_back"
+  },
+  "test-experiment": {
+    "branch_name": "experiment/t2/test-experiment",
+    "created_at": "2025-07-23T16:47:28.213604",
+    "created_by": "system",
+    "description": "Test experiment for prompt versioning",
+    "experiment_id": "test-experiment",
+    "experiment_type": "T2",
+    "metrics": {
+      "accuracy": 0.95,
+      "response_time": 1.2,
+      "user_satisfaction": 4.5
+    },
+    "prompt_changes": [],
+    "status": "completed"
+  }
+}

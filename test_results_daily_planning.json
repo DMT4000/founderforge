@@ -1,0 +1,94 @@
+{
+  "basic_planning": {
+    "test_name": "basic_daily_planning",
+    "success": true,
+    "execution_time": 0.011947393417358398,
+    "within_time_limit": true,
+    "plan_generated": true,
+    "action_items_count": 4,
+    "has_time_blocks": true,
+    "has_coaching_message": true,
+    "confidence_score": 0.9091320757743371,
+    "agent_chain_executed": true
+  },
+  "parallel_planning": {
+    "test_name": "parallel_planning",
+    "total_plans": 3,
+    "successful_plans": 3,
+    "execution_time": 0.020699262619018555,
+    "within_time_limit": true,
+    "average_time_per_plan": 0.0068997542063395185,
+    "parallel_efficiency": true
+  },
+  "agent_chain": {
+    "test_name": "agent_chain_integration",
+    "planner_executed": true,
+    "tool_caller_executed": true,
+    "coach_executed": true,
+    "orchestrator_executed": true,
+    "all_agents_chained": true,
+    "plan_quality": {
+      "has_action_items": true,
+      "has_priorities": true,
+      "has_time_estimates": true,
+      "has_categories": true,
+      "has_time_blocks": true,
+      "has_success_metrics": true
+    },
+    "coaching_personalized": true
+  },
+  "local_data": {
+    "test_name": "local_data_integration",
+    "business_data_loaded": true,
+    "industry_insights_loaded": true,
+    "recent_activities_loaded": true,
+    "planning_templates_loaded": true,
+    "data_influenced_plan": true,
+    "plan_saved_locally": true
+  },
+  "performance": {
+    "test_name": "performance_requirements",
+    "scenarios_tested": 3,
+    "average_execution_time": 0.007071574529012044,
+    "all_within_time_limit": true,
+    "fastest_time": 0.0068895816802978516,
+    "slowest_time": 0.0074312686920166016,
+    "scenario_results": [
+      {
+        "scenario": "simple",
+        "execution_time": 0.0068895816802978516,
+        "within_limit": true,
+        "success": true,
+        "action_items_count": 4
+      },
+      {
+        "scenario": "medium",
+        "execution_time": 0.0074312686920166016,
+        "within_limit": true,
+        "success": true,
+        "action_items_count": 4
+      },
+      {
+        "scenario": "complex",
+        "execution_time": 0.00689387321472168,
+        "within_limit": true,
+        "success": true,
+        "action_items_count": 4
+      }
+    ]
+  },
+  "summary": {
+    "total_tests": 4,
+    "successful_tests": 5,
+    "overall_success": false,
+    "workflow_performance": {
+      "total_plans_generated": 9,
+      "average_planning_time": 0.011404911677042643,
+      "total_planning_time": 0.10264420509338379,
+      "completion_rates": [],
+      "performance_target_met": true,
+      "target_completion_time": 60.0,
+      "performance_ratio": 1.0
+    }
+  }
+}

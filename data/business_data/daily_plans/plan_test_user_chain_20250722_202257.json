@@ -1,0 +1,86 @@
+{
+  "plan_id": "plan_test_user_chain_20250722_202257",
+  "user_id": "test_user_chain",
+  "date": "2025-07-22",
+  "action_items": [
+    {
+      "title": "Analyze customer feedback data",
+      "description": "Work on: Analyze customer feedback data",
+      "priority": "medium",
+      "estimated_time": "1 hour",
+      "category": "business",
+      "deadline": null,
+      "dependencies": [],
+      "tools_needed": [],
+      "success_criteria": [
+        "Analysis completed with clear findings",
+        "Recommendations documented",
+        "Data sources validated"
+      ]
+    },
+    {
+      "title": "Prepare strategic presentation",
+      "description": "Work on: Prepare strategic presentation",
+      "priority": "medium",
+      "estimated_time": "1 hour",
+      "category": "operations",
+      "deadline": null,
+      "dependencies": [],
+      "tools_needed": [],
+      "success_criteria": [
+        "Task completed successfully",
+        "Objectives achieved",
+        "Documentation updated"
+      ]
+    },
+    {
+      "title": "Team motivation session",
+      "description": "Work on: Team motivation session",
+      "priority": "medium",
+      "estimated_time": "1 hour",
+      "category": "team",
+      "deadline": null,
+      "dependencies": [],
+      "tools_needed": [],
+      "success_criteria": [
+        "Task completed successfully",
+        "Objectives achieved",
+        "Documentation updated"
+      ]
+    }
+  ],
+  "time_blocks": [
+    {
+      "name": "Afternoon Execution Block",
+      "start_time": "13:00",
+      "end_time": "16:00",
+      "duration": "3 hours",
+      "energy_level": "medium",
+      "action_items": [
+        "Analyze customer feedback data",
+        "Prepare strategic presentation",
+        "Team motivation session"
+      ],
+      "description": "Meetings, communication, and collaborative work"
+    }
+  ],
+  "motivational_message": "Stay focused on your priorities and make steady progress today!",
+  "success_metrics": [
+    "Complete high-priority tasks",
+    "Maintain good energy"
+  ],
+  "contingency_plans": [
+    "If running behind schedule, defer low-priority items to tomorrow",
+    "If energy is low, switch to administrative tasks",
+    "If meetings run long, have backup 15-minute versions of agenda items",
+    "Keep buffer time between high-focus tasks for context switching"
+  ],
+  "coaching_insights": [
+    "Focus on your highest-impact activities first",
+    "Take breaks between intensive tasks to maintain energy",
+    "Celebrate small wins throughout the day"
+  ],
+  "estimated_completion_time": "3 hours",
+  "confidence_score": 0.0,
+  "created_at": "2025-07-22T20:22:57.070559"
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "timestamp": "2025-07-23T16:32:26.048663",
+    "flag_name": "test_flag",
+    "old_value": null,
+    "new_value": true,
+    "changed_by": "test_user",
+    "reason": "Testing feature flag system"
+  },
+  {
+    "timestamp": "2025-07-23T16:33:45.135558",
+    "flag_name": "test_flag",
+    "old_value": true,
+    "new_value": false,
+    "changed_by": "test_user",
+    "reason": "Testing toggle functionality"
+  },
+  {
+    "timestamp": "2025-07-23T16:34:09.073533",
+    "flag_name": "enable_memory_system",
+    "old_value": true,
+    "new_value": false,
+    "changed_by": "settings",
+    "reason": "Updated via settings.update_feature_flag"
+  },
+  {
+    "timestamp": "2025-07-23T16:34:09.084593",
+    "flag_name": "enable_memory_system",
+    "old_value": false,
+    "new_value": true,
+    "changed_by": "settings",
+    "reason": "Updated via settings.update_feature_flag"
+  }
+]

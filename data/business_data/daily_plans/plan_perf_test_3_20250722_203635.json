@@ -1,0 +1,115 @@
+{
+  "plan_id": "plan_perf_test_3_20250722_203635",
+  "user_id": "perf_test_3",
+  "date": "2025-07-22",
+  "action_items": [
+    {
+      "title": "Review product roadmap",
+      "description": "Analyze current product development priorities and adjust timeline based on customer feedback",
+      "priority": "low",
+      "estimated_time": "1-2 hours",
+      "category": "product",
+      "deadline": null,
+      "dependencies": [],
+      "tools_needed": [
+        "product team",
+        "customer data",
+        "market research"
+      ],
+      "success_criteria": [
+        "Task completed successfully",
+        "Objectives achieved",
+        "Documentation updated"
+      ]
+    },
+    {
+      "title": "Prepare investor presentation",
+      "description": "Update pitch deck with latest metrics and prepare talking points for upcoming investor meetings",
+      "priority": "low",
+      "estimated_time": "30-60 minutes",
+      "category": "team",
+      "deadline": null,
+      "dependencies": [],
+      "tools_needed": [
+        "financial data",
+        "presentation template",
+        "design team"
+      ],
+      "success_criteria": [
+        "Task completed successfully",
+        "Objectives achieved",
+        "Documentation updated"
+      ]
+    },
+    {
+      "title": "Team standup meeting",
+      "description": "Daily sync with engineering and product teams to discuss progress and blockers",
+      "priority": "low",
+      "estimated_time": "30-60 minutes",
+      "category": "product",
+      "deadline": null,
+      "dependencies": [],
+      "tools_needed": [
+        "team members",
+        "meeting room",
+        "agenda"
+      ],
+      "success_criteria": [
+        "Meeting completed on time",
+        "Key decisions documented",
+        "Next steps clearly defined"
+      ]
+    },
+    {
+      "title": "Customer feedback analysis",
+      "description": "Review recent customer feedback and identify patterns for product improvements",
+      "priority": "low",
+      "estimated_time": "1-2 hours",
+      "category": "product",
+      "deadline": null,
+      "dependencies": [],
+      "tools_needed": [
+        "customer support data",
+        "feedback analysis tools"
+      ],
+      "success_criteria": [
+        "Task completed successfully",
+        "Objectives achieved",
+        "Documentation updated"
+      ]
+    }
+  ],
+  "time_blocks": [
+    {
+      "name": "Evening Wrap-up Block",
+      "start_time": "16:30",
+      "end_time": "17:30",
+      "duration": "1 hour",
+      "energy_level": "low",
+      "action_items": [
+        "Review product roadmap",
+        "Prepare investor presentation"
+      ],
+      "description": "Administrative tasks and planning"
+    }
+  ],
+  "motivational_message": "{\n  \"executive_summary\": \"Mock daily action plan focusing on high-priority business tasks and strategic objectives\",\n  \"action_items\": [\n    {\n      \"title\": \"Review product roadmap\",\n      \"description\": \"Analyze current product development priorities and adjust timeline based on customer feedback\",\n      \"priority\": \"high\",\n      \"timeline\": \"2 hours\",\n      \"resources_needed\": [\n        \"product team\",\n        \"customer data\",\n        \"market research\"\n      ]\n    },\n    {\n      \"title\": \"Prepare investor presentation\",\n      \"description\": \"Update pitch deck with latest metrics and prepare talking points for upcoming investor meetings\",\n      \"priority\": \"high\",\n      \"timeline\": \"3 hours\",\n      \"resources_needed\": [\n        \"financial data\",\n        \"presentation template\",\n        \"design team\"\n      ]\n    },\n    {\n      \"title\": \"Team standup meeting\",\n      \"description\": \"Daily sync with engineering and product teams to discuss progress and blockers\",\n      \"priority\": \"medium\",\n      \"timeline\": \"30 minutes\",\n      \"resources_needed\": [\n        \"team members\",\n        \"meeting room\",\n        \"agenda\"\n      ]\n    },\n    {\n      \"title\": \"Customer feedback analysis\",\n      \"description\": \"Review recent customer feedback and identify patterns for product improvements\",\n      \"priority\": \"medium\",\n      \"timeline\": \"1 hour\",\n      \"resources_needed\": [\n        \"customer support data\",\n        \"feedback analysis tools\"\n      ]\n    }\n  ],\n  \"success_metrics\": [\n    \"Complete all high-priority tasks by end of day\",\n    \"Gather actionable insights from customer feedback\",\n    \"Advance investor presentation to review-ready state\"\n  ],\n  \"risks\": [\n    {\n      \"risk\": \"Investor meeting preparation may take longer than expected\",\n      \"mitigation\": \"Focus on key metrics and defer detailed slides to follow-up\"\n    },\n    {\n      \"risk\": \"Team meeting may reveal unexpected blockers\",\n      \"mitigation\": \"Prepare backup plans and allocate buffer time for problem-solving\"\n    }\n  ],\n  \"next_steps\": [\n    \"Schedule follow-up meetings based on today's outcomes\",\n    \"Prepare tomorrow's priorities based on progress made\",\n    \"Document key decisions and learnings from customer feedback\"\n  ]\n}",
+  "success_metrics": [
+    "Complete all high-priority tasks by end of day",
+    "Gather actionable insights from customer feedback",
+    "Advance investor presentation to review-ready state"
+  ],
+  "contingency_plans": [
+    "If running behind schedule, defer low-priority items to tomorrow",
+    "If energy is low, switch to administrative tasks",
+    "If meetings run long, have backup 15-minute versions of agenda items",
+    "Keep buffer time between high-focus tasks for context switching",
+    "Have backup agenda for shortened meetings"
+  ],
+  "coaching_insights": [
+    "{\n  \"executive_summary\": \"Mock daily action plan focusing on high-priority business tasks and strategic objectives\",\n  \"action_items\": [\n    {\n      \"title\": \"Review product roadmap\",\n      \"description\": \"Analyze current product development priorities and adjust timeline based on customer feedback\",\n      \"priority\": \"high\",\n      \"timeline\": \"2 hours\",\n      \"resources_needed\": [\n        \"product team\",\n        \"customer data\",\n        \"market research\"\n      ]\n    },\n    {\n      \"title\": \"Prepare investor presentation\",\n      \"description\": \"Update pitch deck with latest metrics and prepare talking points for upcoming investor meetings\",\n      \"priority\": \"high\",\n      \"timeline\": \"3 hours\",\n      \"resources_needed\": [\n        \"financial data\",\n        \"presentation template\",\n        \"design team\"\n      ]\n    },\n    {\n      \"title\": \"Team standup meeting\",\n      \"description\": \"Daily sync with engineering and product teams to discuss progress and blockers\",\n      \"priority\": \"medium\",\n      \"timeline\": \"30 minutes\",\n      \"resources_needed\": [\n        \"team members\",\n        \"meeting room\",\n        \"agenda\"\n      ]\n    },\n    {\n      \"title\": \"Customer feedback analysis\",\n      \"description\": \"Review recent customer feedback and identify patterns for product improvements\",\n      \"priority\": \"medium\",\n      \"timeline\": \"1 hour\",\n      \"resources_needed\": [\n        \"customer support data\",\n        \"feedback analysis tools\"\n      ]\n    }\n  ],\n  \"success_metrics\": [\n    \"Complete all high-priority tasks by end of day\",\n    \"Gather actionable insights from customer feedback\",\n    \"Advance investor presentation to review-ready state\"\n  ],\n  \"risks\": [\n    {\n      \"risk\": \"Investor meeting preparation may take longer than expected\",\n      \"mitigation\": \"Focus on key metrics and defer detailed slides to follow-up\"\n    },\n    {\n      \"risk\": \"Team meeting may reveal unexpected blockers\",\n      \"mitigation\": \"Prepare backup plans and allocate buffer time for problem-solving\"\n    }\n  ],\n  \"next_steps\": [\n    \"Schedule follow-up meetings based on today's outcomes\",\n    \"Prepare tomorrow's priorities based on progress made\",\n    \"Document key decisions and learnings from customer feedback\"\n  ]\n}."
+  ],
+  "estimated_completion_time": "126 hours",
+  "confidence_score": 0.8472669025031692,
+  "created_at": "2025-07-22T20:36:35.657942"
+}

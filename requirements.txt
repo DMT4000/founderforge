@@ -6,7 +6,6 @@ sentence-transformers>=2.2.0
 
 # Local storage and search
 faiss-cpu>=1.7.0
-sqlite3
 
 # Web interface
 streamlit>=1.28.0

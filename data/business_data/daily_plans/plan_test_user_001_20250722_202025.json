@@ -1,0 +1,23 @@
+{
+  "plan_id": "plan_test_user_001_20250722_202025",
+  "user_id": "test_user_001",
+  "date": "2025-07-22",
+  "action_items": [],
+  "time_blocks": [],
+  "motivational_message": "",
+  "success_metrics": [],
+  "contingency_plans": [
+    "If running behind schedule, defer low-priority items to tomorrow",
+    "If energy is low, switch to administrative tasks",
+    "If meetings run long, have backup 15-minute versions of agenda items",
+    "Keep buffer time between high-focus tasks for context switching"
+  ],
+  "coaching_insights": [
+    "Focus on your highest-impact activities first",
+    "Take breaks between intensive tasks to maintain energy",
+    "Celebrate small wins throughout the day"
+  ],
+  "estimated_completion_time": "0 minutes",
+  "confidence_score": 0.0,
+  "created_at": "2025-07-22T20:20:25.146827"
+}

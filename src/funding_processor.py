@@ -5,6 +5,7 @@ Implements specialized validation and processing for funding applications.
 
 import json
 import logging
+from logging_manager import get_logging_manager, LogLevel, LogCategory
 import time
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
@@ -99,7 +100,7 @@ class FundingFormProcessor:
         """
         self.orchestrator = orchestrator
         self.validation_rules_path = Path(validation_rules_path)
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logging_manager().get_logger(__name__.split(".")[-1], LogCategory.SYSTEM)
         
         # Load validation rules
         self.validation_rules = self._load_validation_rules()

@@ -5,6 +5,7 @@ Run this script to create the database schema.
 """
 
 import logging
+from logging_manager import get_logging_manager, LogLevel, LogCategory
 from database import initialize_database, get_db_manager
 
 def main():

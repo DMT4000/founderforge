@@ -2,6 +2,7 @@
 
 import re
 import logging
+from logging_manager import get_logging_manager, LogLevel, LogCategory
 from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
 from enum import Enum
@@ -59,7 +60,7 @@ class ContentFilter:
     """Basic content filtering for toxicity and PII detection."""
     
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logging_manager().get_logger(__name__.split(".")[-1], LogCategory.SYSTEM)
         
         # PII patterns (basic regex-based detection)
         self.pii_patterns = {
@@ -156,7 +157,7 @@ class ConfidenceManager:
         Args:
             confidence_threshold: Minimum confidence threshold (default from settings)
         """
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logging_manager().get_logger(__name__.split(".")[-1], LogCategory.SYSTEM)
         self.confidence_threshold = confidence_threshold or settings.get_feature_flag('confidence_threshold', 0.8)
         self.content_filter = ContentFilter()
         

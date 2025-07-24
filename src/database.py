@@ -5,6 +5,7 @@ Provides SQLite database setup, connection management, and error handling.
 
 import sqlite3
 import logging
+from logging_manager import get_logging_manager, LogLevel, LogCategory
 from pathlib import Path
 from typing import Optional, Any, Dict
 from contextlib import contextmanager
@@ -23,7 +24,7 @@ class DatabaseManager:
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self._connection: Optional[sqlite3.Connection] = None
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logging_manager().get_logger(__name__.split(".")[-1], LogCategory.SYSTEM)
         
     def get_connection(self) -> sqlite3.Connection:
         """

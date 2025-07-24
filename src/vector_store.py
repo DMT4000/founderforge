@@ -6,6 +6,7 @@ Uses sentence-transformers for local document embedding and FAISS for efficient 
 import os
 import pickle
 import logging
+from logging_manager import get_logging_manager, LogLevel, LogCategory
 import numpy as np
 from typing import List, Dict, Any, Optional, Tuple
 from pathlib import Path
@@ -39,7 +40,7 @@ class VectorStore:
         self.index_path = Path(index_path)
         self.index_path.mkdir(parents=True, exist_ok=True)
         
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logging_manager().get_logger(__name__.split(".")[-1], LogCategory.SYSTEM)
         
         # Initialize sentence transformer model
         self.logger.info(f"Loading sentence transformer model: {model_name}")
@@ -450,7 +451,7 @@ class ContextRetriever:
             vector_store: VectorStore instance to use for search
         """
         self.vector_store = vector_store
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logging_manager().get_logger(__name__.split(".")[-1], LogCategory.SYSTEM)
     
     def retrieve_context(self, query: str, user_id: str, max_results: int = 5, 
                         min_similarity: float = 0.3) -> List[Dict[str, Any]]:

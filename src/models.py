@@ -238,6 +238,23 @@ class AgentLog:
             "success": self.success,
             "error_message": self.error_message
         }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'AgentLog':
+        """Create AgentLog from dictionary."""
+        timestamp_str = data.get("timestamp")
+        timestamp = datetime.fromisoformat(timestamp_str) if timestamp_str else datetime.now()
+        
+        return cls(
+            agent_name=data.get("agent_name", "unknown"),
+            action=data.get("action", "unknown"),
+            input_data=data.get("input_data", {}),
+            output_data=data.get("output_data", {}),
+            execution_time=data.get("execution_time", 0.0),
+            timestamp=timestamp,
+            success=data.get("success", True),
+            error_message=data.get("error_message", "")
+        )
 
 
 @dataclass

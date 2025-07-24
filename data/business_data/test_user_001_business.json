@@ -1,0 +1,13 @@
+{
+  "company_name": "TechStart Inc",
+  "stage": "early_stage",
+  "industry": "fintech",
+  "team_size": 8,
+  "funding_stage": "seed",
+  "monthly_revenue": 15000,
+  "key_metrics": {
+    "user_growth": "15% MoM",
+    "retention_rate": "85%",
+    "burn_rate": "$25k/month"
+  }
+}

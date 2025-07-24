@@ -5,6 +5,7 @@ Implements Orchestrator, Validator, Planner, Tool-Caller, and Coach agents.
 
 import json
 import logging
+from logging_manager import get_logging_manager, LogLevel, LogCategory
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
@@ -14,6 +15,7 @@ from enum import Enum
 import uuid
 
 from langgraph.graph import StateGraph, END
+from operator import add
 
 from src.models import (
     AgentLog, WorkflowResult, UserContext, Response, TokenUsage
@@ -32,17 +34,19 @@ class AgentType(Enum):
     COACH = "coach"
 
 
+from typing import Annotated
+
 class WorkflowState(TypedDict):
     """State structure for LangGraph workflows."""
     user_id: str
     user_context: Dict[str, Any]
     current_task: str
     task_data: Dict[str, Any]
-    agent_outputs: Dict[str, Any]
+    agent_outputs: Annotated[Dict[str, Any], lambda x, y: {**x, **y}]  # Merge dictionaries
     workflow_result: Dict[str, Any]
-    confidence_scores: Dict[str, float]
-    execution_logs: List[Dict[str, Any]]
-    error_messages: List[str]
+    confidence_scores: Annotated[Dict[str, float], lambda x, y: {**x, **y}]  # Merge dictionaries
+    execution_logs: Annotated[List[Dict[str, Any]], add]  # Concatenate lists
+    error_messages: Annotated[List[str], add]  # Concatenate lists
     next_agent: Optional[str]
     completed: bool
 
@@ -81,7 +85,7 @@ class BaseAgent(ABC):
         self.gemini_client = gemini_client
         self.context_manager = context_manager
         self.confidence_manager = confidence_manager
-        self.logger = logging.getLogger(f"{__name__}.{config.name}")
+        self.logger = get_logging_manager().get_logger(f"{__name__}.{config.name}", LogCategory.SYSTEM)
         
         # Initialize execution tracking
         self.execution_count = 0
@@ -261,21 +265,54 @@ class OrchestratorAgent(BaseAgent):
         try:
             response = self.gemini_client.generate_content(prompt, temperature=0.3)
             
-            # Parse JSON response
-            analysis = json.loads(response.content)
-            analysis["confidence"] = response.confidence
-            
-            return analysis
+            # Try to parse as JSON first
+            try:
+                analysis = json.loads(response.content)
+                analysis["confidence"] = response.confidence
+                return analysis
+            except json.JSONDecodeError:
+                # If JSON parsing fails, create a default analysis
+                self.logger.warning("Failed to parse task analysis as JSON, using default")
+                return self._create_default_analysis(workflow_type, response.confidence)
             
         except Exception as e:
             self.logger.error(f"Task analysis failed: {e}")
-            return {
+            return self._create_default_analysis(workflow_type, 0.5)
+    
+    def _create_default_analysis(self, workflow_type: str, confidence: float) -> Dict[str, Any]:
+        """Create default analysis when Gemini response cannot be parsed."""
+        # Default analysis based on workflow type
+        workflow_defaults = {
+            "daily_planning": {
                 "complexity": "medium",
-                "required_agents": ["validator", "planner"],
-                "estimated_time": 30.0,
-                "confidence": 0.5,
-                "risks": [f"Analysis failed: {str(e)}"]
+                "required_agents": ["planner", "tool_caller", "coach"],
+                "estimated_time": "30 seconds",
+                "risks": ["Multiple priorities to balance", "Time management challenges"]
+            },
+            "funding_form": {
+                "complexity": "high",
+                "required_agents": ["validator", "planner", "tool_caller"],
+                "estimated_time": "25 seconds",
+                "risks": ["Complex validation requirements", "Financial data accuracy"]
+            },
+            "general": {
+                "complexity": "medium",
+                "required_agents": ["planner"],
+                "estimated_time": "15 seconds",
+                "risks": ["Generic task complexity"]
             }
+        }
+        
+        defaults = workflow_defaults.get(workflow_type, workflow_defaults["general"])
+        
+        return {
+            "complexity": defaults["complexity"],
+            "required_agents": defaults["required_agents"],
+            "estimated_time": defaults["estimated_time"],
+            "confidence": confidence,
+            "risks": defaults["risks"],
+            "analysis_type": "default_fallback"
+        }
     
     def _determine_agent_sequence(self, workflow_type: str, analysis: Dict[str, Any]) -> List[str]:
         """Determine the sequence of agents needed for the workflow."""
@@ -548,26 +585,34 @@ class PlannerAgent(BaseAgent):
         # Build context-aware prompt
         prompt = self._build_planning_prompt(workflow_type, user_context, task_data)
         
-        # Generate plan using Gemini
-        response = self.gemini_client.generate_content(
-            prompt,
-            temperature=0.7,
-            max_output_tokens=1500
-        )
-        
         try:
-            # Try to parse as JSON first
-            plan = json.loads(response.content)
-        except json.JSONDecodeError:
-            # If not JSON, create structured plan from text
-            plan = self._parse_text_plan(response.content)
-        
-        # Add metadata
-        plan["confidence"] = response.confidence
-        plan["generated_at"] = datetime.now().isoformat()
-        plan["workflow_type"] = workflow_type
-        
-        return plan
+            # Generate plan using Gemini
+            response = self.gemini_client.generate_content(
+                prompt,
+                temperature=0.7,
+                max_output_tokens=20000
+            )
+            
+            try:
+                # Try to parse as JSON first
+                plan = json.loads(response.content)
+                self.logger.info(f"Successfully parsed plan with {len(plan.get('action_items', []))} action items")
+            except json.JSONDecodeError:
+                self.logger.warning("Failed to parse Gemini response as JSON, using text parsing")
+                # If not JSON, create structured plan from text
+                plan = self._parse_text_plan(response.content)
+            
+            # Add metadata
+            plan["confidence"] = response.confidence
+            plan["generated_at"] = datetime.now().isoformat()
+            plan["workflow_type"] = workflow_type
+            
+            return plan
+            
+        except Exception as e:
+            self.logger.error(f"Plan generation failed: {e}")
+            # Return a basic fallback plan
+            return self._create_fallback_plan(workflow_type, user_context, task_data)
     
     def _build_planning_prompt(
         self,
@@ -621,6 +666,63 @@ class PlannerAgent(BaseAgent):
         """
         
         return base_prompt
+    
+    def _create_fallback_plan(self, workflow_type: str, user_context: Dict[str, Any], task_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a fallback plan when Gemini API fails."""
+        priorities = task_data.get("planning_input", {}).get("current_priorities", [])
+        
+        # Create basic action items from priorities
+        action_items = []
+        for i, priority in enumerate(priorities[:4]):  # Limit to 4 items
+            action_items.append({
+                "title": priority,
+                "description": f"Focus on completing: {priority}",
+                "priority": "high" if i < 2 else "medium",
+                "timeline": "2 hours",
+                "resources_needed": ["time", "focus"]
+            })
+        
+        # Add default items if no priorities
+        if not action_items:
+            action_items = [
+                {
+                    "title": "Review daily goals",
+                    "description": "Start the day by reviewing and prioritizing objectives",
+                    "priority": "high",
+                    "timeline": "15 minutes",
+                    "resources_needed": ["planning tools"]
+                },
+                {
+                    "title": "Deep work session",
+                    "description": "Focus on the most important project work",
+                    "priority": "high",
+                    "timeline": "2 hours",
+                    "resources_needed": ["quiet environment", "necessary tools"]
+                }
+            ]
+        
+        return {
+            "executive_summary": f"Daily action plan for {workflow_type} workflow with {len(action_items)} priority tasks",
+            "action_items": action_items,
+            "success_metrics": [
+                "Complete all high-priority tasks",
+                "Maintain focus throughout the day",
+                "Make progress on key objectives"
+            ],
+            "risks": [
+                {
+                    "risk": "Time management challenges",
+                    "mitigation": "Use time-blocking and regular check-ins"
+                }
+            ],
+            "next_steps": [
+                "Start with highest priority item",
+                "Review progress at midday",
+                "Plan tomorrow's priorities"
+            ],
+            "confidence": 0.7,
+            "fallback_used": True
+        }
     
     def _parse_text_plan(self, text_content: str) -> Dict[str, Any]:
         """Parse text content into structured plan format."""
@@ -681,9 +783,13 @@ class ToolCallerAgent(BaseAgent):
         try:
             task_data = state.get("task_data", {})
             planner_output = state.get("agent_outputs", {}).get("planner_output", {})
+            workflow_type = state.get("current_task", "")
+            
+            # Add workflow type to task_data for tool determination
+            enhanced_task_data = {**task_data, "current_task": workflow_type}
             
             # Determine which tools to call based on plan
-            tool_calls = self._determine_tool_calls(planner_output, task_data)
+            tool_calls = self._determine_tool_calls(planner_output, enhanced_task_data)
             
             # Execute tool calls
             tool_results = await self._execute_tool_calls(tool_calls)
@@ -770,7 +876,45 @@ class ToolCallerAgent(BaseAgent):
         tool_calls = []
         
         action_items = planner_output.get("action_items", [])
+        # Get workflow type from task_data or from planner_output
+        workflow_type = task_data.get("current_task", "") or planner_output.get("workflow_type", "")
         
+        # Debug logging
+        self.logger.debug(f"Tool determination: workflow_type = '{workflow_type}', action_items = {len(action_items)}")
+        
+        # For daily planning workflows, always optimize priorities and estimate times
+        if "daily_planning" in workflow_type.lower():
+            self.logger.debug("Daily planning workflow detected, adding standard tools")
+            
+            # Optimize task priorities based on business goals
+            business_data = task_data.get("business_data", {})
+            goals = business_data.get("goals", {}).get("short_term", [])
+            
+            tool_calls.append({
+                "tool": "priority_optimizer",
+                "params": {
+                    "tasks": action_items,
+                    "business_goals": goals
+                }
+            })
+            
+            # Estimate time requirements for all tasks
+            tool_calls.append({
+                "tool": "time_estimator",
+                "params": {"tasks": action_items}
+            })
+            
+            # Check resource availability
+            available_resources = ["calendar", "communication_tools", "development_tools", "focused_time", "team_availability"]
+            tool_calls.append({
+                "tool": "resource_checker",
+                "params": {
+                    "tasks": action_items,
+                    "available_resources": available_resources
+                }
+            })
+        
+        # General tool determination for all workflows
         for item in action_items:
             # Simple heuristics to determine tool needs
             title = item.get("title", "").lower()
@@ -788,6 +932,7 @@ class ToolCallerAgent(BaseAgent):
                     "params": {"content": item, "format": "text"}
                 })
         
+        self.logger.debug(f"Tool determination complete: {len(tool_calls)} tools to execute")
         return tool_calls
     
     async def _execute_tool_calls(self, tool_calls: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -1050,7 +1195,7 @@ class CoachAgent(BaseAgent):
         response = self.gemini_client.generate_content(
             prompt,
             temperature=0.8,  # Higher temperature for more creative coaching
-            max_output_tokens=800
+            max_output_tokens=20000
         )
         
         coaching_response = {
@@ -1076,11 +1221,35 @@ class CoachAgent(BaseAgent):
         
         # Extract key information from other agents
         plan_summary = ""
+        action_items_count = 0
+        tool_insights = ""
+        
         if "planner_output" in agent_outputs:
-            plan_summary = agent_outputs["planner_output"].get("executive_summary", "")
+            planner_output = agent_outputs["planner_output"]
+            plan_summary = planner_output.get("executive_summary", "")
+            action_items_count = len(planner_output.get("action_items", []))
+        
+        if "tool_caller_output" in agent_outputs:
+            tool_output = agent_outputs["tool_caller_output"]
+            tool_results = tool_output.get("tool_results", [])
+            
+            # Extract insights from tool results
+            for result in tool_results:
+                if result.get("tool") == "priority_optimizer" and result.get("success"):
+                    optimized_tasks = result.get("result", {}).get("optimized_tasks", [])
+                    high_priority_count = sum(1 for task in optimized_tasks if task.get("priority") == "high")
+                    tool_insights += f"You have {high_priority_count} high-priority tasks today. "
+                
+                if result.get("tool") == "time_estimator" and result.get("success"):
+                    total_hours = result.get("result", {}).get("total_estimated_hours", 0)
+                    tool_insights += f"Your planned tasks will take approximately {total_hours} hours. "
+                
+                if result.get("tool") == "resource_checker" and result.get("success"):
+                    readiness = result.get("result", {}).get("readiness_percentage", 0)
+                    tool_insights += f"{readiness}% of your tasks have all required resources available. "
         
         prompt = f"""
-        You are an experienced business coach and mentor. Provide personalized, motivational guidance to an entrepreneur.
+        You are an experienced business coach and mentor. Provide personalized, motivational guidance to an entrepreneur for their daily planning.
         
         Entrepreneur Profile:
         - Business Stage: {business_info.get('stage', 'unknown')}
@@ -1090,17 +1259,20 @@ class CoachAgent(BaseAgent):
         - Goals: {', '.join(goals) if goals else 'Not specified'}
         - Communication Style: {preferences.get('communication_style', 'professional')}
         
-        Current Plan Summary: {plan_summary}
+        Today's Plan Overview:
+        - Action Items: {action_items_count} tasks planned
+        - Plan Summary: {plan_summary}
+        - Tool Insights: {tool_insights}
         
-        Provide coaching that:
-        1. Acknowledges their current situation and progress
-        2. Offers specific, actionable encouragement
-        3. Addresses potential challenges with optimism
-        4. Reinforces their goals and vision
-        5. Provides strategic insights relevant to their stage and industry
+        Provide a motivational daily coaching message (2-3 paragraphs) that:
+        1. Acknowledges their current workload and priorities
+        2. Offers specific encouragement for today's challenges
+        3. Connects today's tasks to their bigger goals
+        4. Provides a strategic insight or tip relevant to their industry/stage
+        5. Ends with an inspiring call to action for the day
         
         Keep the tone {preferences.get('communication_style', 'professional')} and inspiring.
-        Focus on building confidence while being realistic about challenges.
+        Focus on building confidence and momentum for the day ahead.
         """
         
         return prompt
@@ -1147,7 +1319,7 @@ class AgentOrchestrator:
         self.gemini_client = gemini_client
         self.context_manager = context_manager
         self.confidence_manager = confidence_manager
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logging_manager().get_logger(__name__.split(".")[-1], LogCategory.SYSTEM)
         
         # Initialize agents
         self.agents = self._initialize_agents()
@@ -1326,12 +1498,17 @@ class AgentOrchestrator:
         result = await self.agents["planner"].execute(state)
         
         # Update state with planner output
-        state["agent_outputs"]["planner_output"] = result.get("planner_output", {})
+        planner_output = result.get("planner_output", {})
+        state["agent_outputs"]["planner_output"] = planner_output
         state["confidence_scores"].update(result.get("confidence_scores", {}))
         state["execution_logs"].extend(result.get("execution_logs", []))
         
         if result.get("error_messages"):
             state["error_messages"].extend(result["error_messages"])
+        
+        # Debug logging
+        self.logger.debug(f"Planner node: added output with {len(planner_output.get('action_items', []))} action items")
+        self.logger.debug(f"Planner node: current agent_outputs keys = {list(state['agent_outputs'].keys())}")
         
         return state
     
@@ -1340,12 +1517,17 @@ class AgentOrchestrator:
         result = await self.agents["tool_caller"].execute(state)
         
         # Update state with tool caller output
-        state["agent_outputs"]["tool_caller_output"] = result.get("tool_caller_output", {})
+        tool_caller_output = result.get("tool_caller_output", {})
+        state["agent_outputs"]["tool_caller_output"] = tool_caller_output
         state["confidence_scores"].update(result.get("confidence_scores", {}))
         state["execution_logs"].extend(result.get("execution_logs", []))
         
         if result.get("error_messages"):
             state["error_messages"].extend(result["error_messages"])
+        
+        # Debug logging
+        self.logger.debug(f"Tool caller node: added output with {len(tool_caller_output.get('tool_results', []))} tool results")
+        self.logger.debug(f"Tool caller node: current agent_outputs keys = {list(state['agent_outputs'].keys())}")
         
         return state
     
@@ -1354,12 +1536,17 @@ class AgentOrchestrator:
         result = await self.agents["coach"].execute(state)
         
         # Update state with coach output
-        state["agent_outputs"]["coach_output"] = result.get("coach_output", {})
+        coach_output = result.get("coach_output", {})
+        state["agent_outputs"]["coach_output"] = coach_output
         state["confidence_scores"].update(result.get("confidence_scores", {}))
         state["execution_logs"].extend(result.get("execution_logs", []))
         
         if result.get("error_messages"):
             state["error_messages"].extend(result["error_messages"])
+        
+        # Debug logging
+        self.logger.debug(f"Coach node: added output with message length {len(coach_output.get('message', ''))}")
+        self.logger.debug(f"Coach node: current agent_outputs keys = {list(state['agent_outputs'].keys())}")
         
         return state
     
@@ -1384,6 +1571,10 @@ class AgentOrchestrator:
         state["workflow_result"] = workflow_result
         state["completed"] = True
         
+        # Log final state for debugging
+        self.logger.debug(f"Finalizer: agent_outputs = {list(state.get('agent_outputs', {}).keys())}")
+        self.logger.debug(f"Finalizer: workflow success = {workflow_result['success']}")
+        
         return state
     
     def _create_execution_summary(self, state: WorkflowState) -> Dict[str, Any]:
@@ -1403,11 +1594,28 @@ class AgentOrchestrator:
     def _route_from_orchestrator(self, state: WorkflowState) -> str:
         """Route from orchestrator based on next_agent."""
         next_agent = state.get("next_agent")
+        workflow_type = state.get("current_task", "")
         
+        self.logger.debug(f"Routing from orchestrator: next_agent = {next_agent}, workflow_type = {workflow_type}")
+        
+        # For daily planning workflows, ensure we start with planner
+        if "daily_planning" in workflow_type.lower():
+            self.logger.debug("Daily planning workflow detected, routing to planner")
+            return "planner"
+        
+        # For funding form workflows, start with validator
+        if "funding" in workflow_type.lower():
+            self.logger.debug("Funding workflow detected, routing to validator")
+            return "validator"
+        
+        # Use orchestrator's recommendation if available
         if next_agent in ["validator", "planner", "tool_caller", "coach"]:
+            self.logger.debug(f"Using orchestrator recommendation: {next_agent}")
             return next_agent
         
-        return "end"
+        # Default to planner for unspecified workflows
+        self.logger.debug("Using default routing to planner")
+        return "planner"
     
     def _route_from_validator(self, state: WorkflowState) -> str:
         """Route from validator based on validation result."""
@@ -1498,10 +1706,8 @@ class AgentOrchestrator:
             # Execute workflow with checkpointing
             config = {"configurable": {"thread_id": f"{user_id}_{workflow_type}_{int(time.time())}"}}
             
-            final_state = None
-            async for state in self.compiled_graph.astream(initial_state, config):
-                final_state = state
-                self.logger.debug(f"Workflow state update: {list(state.keys())}")
+            # Execute the workflow and get the final state
+            final_state = await self.compiled_graph.ainvoke(initial_state, config)
             
             if not final_state:
                 raise Exception("Workflow execution failed - no final state")
@@ -1510,13 +1716,19 @@ class AgentOrchestrator:
             workflow_result_data = final_state.get("workflow_result", {})
             execution_time = time.time() - start_time
             
+            # Debug logging
+            self.logger.debug(f"Final state keys: {list(final_state.keys())}")
+            self.logger.debug(f"Final state agent_outputs: {list(final_state.get('agent_outputs', {}).keys())}")
+            self.logger.debug(f"Workflow result data: {list(workflow_result_data.keys())}")
+            
             # Create WorkflowResult object
             workflow_result = WorkflowResult(
                 success=workflow_result_data.get("success", False),
                 result_data={
-                    "agent_outputs": workflow_result_data.get("agent_outputs", {}),
+                    "agent_outputs": final_state.get("agent_outputs", {}),
+                    "task_data": task_data,
                     "execution_summary": workflow_result_data.get("execution_summary", {}),
-                    "task_data": final_state.get("task_data", {})
+                    "overall_confidence": workflow_result_data.get("overall_confidence", 0.0)
                 },
                 execution_time=execution_time,
                 confidence_score=workflow_result_data.get("overall_confidence", 0.0)
@@ -1524,16 +1736,22 @@ class AgentOrchestrator:
             
             # Add agent logs
             for log_data in final_state.get("execution_logs", []):
-                agent_log = AgentLog(
-                    agent_name=log_data.get("agent_name", "unknown"),
-                    action=log_data.get("action", "unknown"),
-                    input_data=log_data.get("input_data", {}),
-                    output_data=log_data.get("output_data", {}),
-                    execution_time=log_data.get("execution_time", 0.0),
-                    success=log_data.get("success", True),
-                    error_message=log_data.get("error_message", "")
-                )
-                workflow_result.add_agent_log(agent_log)
+                try:
+                    agent_log = AgentLog.from_dict(log_data)
+                    workflow_result.add_agent_log(agent_log)
+                except Exception as e:
+                    self.logger.warning(f"Failed to create agent log from data: {e}")
+                    # Create a basic log entry
+                    agent_log = AgentLog(
+                        agent_name=log_data.get("agent_name", "unknown"),
+                        action=log_data.get("action", "unknown"),
+                        input_data=log_data.get("input_data", {}),
+                        output_data=log_data.get("output_data", {}),
+                        execution_time=log_data.get("execution_time", 0.0),
+                        success=log_data.get("success", True),
+                        error_message=log_data.get("error_message", "")
+                    )
+                    workflow_result.add_agent_log(agent_log)
             
             # Log workflow execution
             self._log_workflow_execution(workflow_type, user_id, workflow_result)
@@ -1549,7 +1767,7 @@ class AgentOrchestrator:
             # Create failed workflow result
             workflow_result = WorkflowResult(
                 success=False,
-                result_data={"error": error_msg},
+                result_data={"error": error_msg, "agent_outputs": {}},
                 execution_time=execution_time,
                 confidence_score=0.0
             )

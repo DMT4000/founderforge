@@ -9,14 +9,17 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Union
 from dataclasses import dataclass, field
 from datetime import datetime
+import time
 
 try:
     from .models import UserContext, Message, BusinessInfo, UserPreferences, TokenUsage
     from .database import get_db_manager
+    from .logging_manager import get_logging_manager, LogLevel, LogCategory, log_performance, log_audit
     from config.settings import settings
 except ImportError:
     from models import UserContext, Message, BusinessInfo, UserPreferences, TokenUsage
     from database import get_db_manager
+    from logging_manager import get_logging_manager, LogLevel, LogCategory, log_performance, log_audit
     import sys
     from pathlib import Path
     sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -82,13 +85,35 @@ class Context:
             prompt_parts.append("")
         
         return "\n".join(prompt_parts)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert context to dictionary for serialization."""
+        return {
+            "user_id": self.user_context.user_id,
+            "goals": self.goals,
+            "business_data": self.business_data,
+            "chat_history": [
+                {"role": msg.role, "content": msg.content, "timestamp": msg.timestamp.isoformat() if hasattr(msg, 'timestamp') and msg.timestamp else None}
+                for msg in self.chat_history
+            ],
+            "guard_rails": self.guard_rails,
+            "priority_data": self.priority_data,
+            "token_count": self.token_count,
+            "sources": self.sources,
+            "user_preferences": {
+                "communication_style": self.user_context.preferences.communication_style,
+                "response_length": self.user_context.preferences.response_length,
+                "focus_areas": self.user_context.preferences.focus_areas
+            } if self.user_context.preferences else {}
+        }
 
 
 class ContextAssembler:
     """Assembles context from multiple local sources."""
     
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
+        self.logging_manager = get_logging_manager()
+        self.logger = self.logging_manager.get_logger("context_assembler", LogCategory.CONTEXT)
         self.db_manager = get_db_manager()
         self.data_dir = settings.data_dir
         
@@ -111,7 +136,13 @@ class ContextAssembler:
         Returns:
             Assembled context object
         """
+        start_time = time.time()
+        
         try:
+            # Log audit event for data access
+            log_audit(user_id, "context_assembly", "user_data", True, 
+                     metadata={"query_length": len(query)})
+            
             # Get user context from database
             user_context = self._get_user_context(user_id)
             
@@ -146,11 +177,39 @@ class ContextAssembler:
             # Calculate token count
             context.token_count = self._estimate_token_count(context)
             
-            self.logger.info(f"Context assembled for user {user_id}: {context.token_count} tokens")
+            execution_time = time.time() - start_time
+            
+            # Log performance metrics
+            log_performance("context_assembler", "assemble_context", execution_time, True,
+                          user_id=user_id, metadata={
+                              "token_count": context.token_count,
+                              "sources_count": len(context.sources),
+                              "chat_history_length": len(chat_history)
+                          })
+            
+            self.logging_manager.log_structured(
+                LogLevel.INFO, LogCategory.CONTEXT, "context_assembler",
+                f"Context assembled for user {user_id}: {context.token_count} tokens",
+                user_id=user_id, execution_time=execution_time,
+                metadata={"token_count": context.token_count, "sources": context.sources}
+            )
+            
             return context
             
         except Exception as e:
-            self.logger.error(f"Context assembly failed for user {user_id}: {e}")
+            execution_time = time.time() - start_time
+            
+            # Log error with performance data
+            log_performance("context_assembler", "assemble_context", execution_time, False,
+                          user_id=user_id, metadata={"error": str(e)})
+            
+            self.logging_manager.log_structured(
+                LogLevel.ERROR, LogCategory.CONTEXT, "context_assembler",
+                f"Context assembly failed for user {user_id}: {e}",
+                user_id=user_id, execution_time=execution_time,
+                error_details={"exception": str(e), "type": type(e).__name__}
+            )
+            
             # Return minimal context on error
             return Context(
                 user_context=UserContext(user_id=user_id),
@@ -395,7 +454,8 @@ class TokenManager:
     """Manages token usage monitoring and logging to local files."""
     
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
+        self.logging_manager = get_logging_manager()
+        self.logger = self.logging_manager.get_logger("token_manager", LogCategory.TOKEN)
         self.data_dir = settings.data_dir
         self.token_logs_dir = self.data_dir / "token_logs"
         self.token_logs_dir.mkdir(parents=True, exist_ok=True)

@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Dict, List, Any
 
 # Setup logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Import required modules

@@ -1,0 +1,393 @@
+{
+  "sample_users": [
+    {
+      "user_id": "founder_001",
+      "name": "Sarah Johnson",
+      "email": "sarah@techstartup.com",
+      "business_info": {
+        "company_name": "TechStart Solutions",
+        "industry": "Technology",
+        "stage": "mvp",
+        "team_size": 8,
+        "description": "AI-powered customer service automation platform for small businesses",
+        "funding_stage": "seed",
+        "monthly_revenue": 15000,
+        "key_metrics": {
+          "user_growth": "15% MoM",
+          "retention_rate": "85%",
+          "burn_rate": "$25k/month",
+          "runway_months": 18
+        }
+      },
+      "goals": [
+        "Complete Series A funding round",
+        "Scale to 100 enterprise customers",
+        "Expand development team to 15 people",
+        "Launch in 3 new markets"
+      ],
+      "preferences": {
+        "communication_style": "professional",
+        "response_length": "detailed",
+        "focus_areas": ["funding", "strategy", "operations"],
+        "timezone": "PST",
+        "language": "en"
+      }
+    },
+    {
+      "user_id": "founder_002", 
+      "name": "Michael Chen",
+      "email": "michael@fintechco.com",
+      "business_info": {
+        "company_name": "FinTech Innovations",
+        "industry": "Financial Technology",
+        "stage": "growth",
+        "team_size": 25,
+        "description": "Digital banking platform for millennials and Gen Z",
+        "funding_stage": "series_a",
+        "monthly_revenue": 85000,
+        "key_metrics": {
+          "user_growth": "25% MoM",
+          "retention_rate": "92%",
+          "burn_rate": "$150k/month",
+          "runway_months": 24
+        }
+      },
+      "goals": [
+        "Prepare for Series B funding",
+        "Achieve profitability by Q4",
+        "Expand to European markets",
+        "Build strategic partnerships"
+      ],
+      "preferences": {
+        "communication_style": "casual",
+        "response_length": "medium",
+        "focus_areas": ["product", "marketing", "team"],
+        "timezone": "EST",
+        "language": "en"
+      }
+    }
+  ],
+  "sample_conversations": [
+    {
+      "user_id": "founder_001",
+      "conversation": [
+        {
+          "role": "user",
+          "content": "Hi, I'm preparing for our Series A funding round. What should I focus on in my pitch deck?",
+          "timestamp": "2024-01-15T10:00:00Z"
+        },
+        {
+          "role": "assistant", 
+          "content": "For your Series A pitch deck, focus on these key elements:\n\n1. **Problem & Solution**: Clearly articulate the customer service automation problem and how your AI platform solves it uniquely\n\n2. **Market Opportunity**: Size the TAM/SAM for AI customer service solutions, especially for SMBs\n\n3. **Traction**: Highlight your $15k MRR, 85% retention rate, and 15% MoM growth\n\n4. **Business Model**: Show path to profitability with your current metrics\n\n5. **Team**: Emphasize your 8-person team's expertise in AI and customer service\n\n6. **Financials**: Project revenue growth and explain your $25k burn rate efficiency\n\n7. **Use of Funds**: Detail how Series A funding will help you reach 100 enterprise customers\n\nGiven your 18-month runway, you're in a strong position. Would you like me to help you develop any specific section?",
+          "timestamp": "2024-01-15T10:01:30Z",
+          "confidence": 0.92,
+          "sources": ["user_context", "business_metrics", "funding_knowledge"]
+        },
+        {
+          "role": "user",
+          "content": "That's helpful. Can you help me think through the competitive landscape slide?",
+          "timestamp": "2024-01-15T10:05:00Z"
+        },
+        {
+          "role": "assistant",
+          "content": "Absolutely! For your competitive landscape slide, structure it to show your differentiation:\n\n**Direct Competitors:**\n- Zendesk, Intercom, Freshworks (established players)\n- Position: \"Legacy solutions, complex setup, expensive for SMBs\"\n\n**Indirect Competitors:**\n- Custom chatbot builders, basic automation tools\n- Position: \"Limited AI capabilities, require technical expertise\"\n\n**Your Differentiation:**\n- AI-first approach specifically designed for SMBs\n- Plug-and-play setup vs. complex implementation\n- Cost-effective pricing model\n- 85% retention rate shows product-market fit\n\n**Competitive Matrix:**\nCreate a 2x2 matrix with axes:\n- X-axis: Setup Complexity (Simple → Complex)\n- Y-axis: AI Sophistication (Basic → Advanced)\n\nPlace yourself in the \"Simple Setup + Advanced AI\" quadrant.\n\n**Key Message:** \"We're the only solution that combines enterprise-grade AI with SMB-friendly simplicity.\"\n\nWould you like help developing specific talking points about your AI capabilities?",
+          "timestamp": "2024-01-15T10:06:45Z",
+          "confidence": 0.89,
+          "sources": ["competitive_analysis", "user_context", "market_knowledge"]
+        }
+      ]
+    }
+  ],
+  "sample_memories": [
+    {
+      "user_id": "founder_001",
+      "memories": [
+        {
+          "content": "Company: TechStart Solutions - AI customer service automation for SMBs",
+          "memory_type": "LONG_TERM",
+          "confidence": 0.95,
+          "created_at": "2024-01-10T09:00:00Z"
+        },
+        {
+          "content": "Current metrics: $15k MRR, 85% retention, 15% MoM growth, $25k burn rate",
+          "memory_type": "LONG_TERM", 
+          "confidence": 0.93,
+          "created_at": "2024-01-10T09:05:00Z"
+        },
+        {
+          "content": "Preparing Series A pitch deck, focusing on competitive differentiation",
+          "memory_type": "SHORT_TERM",
+          "confidence": 0.88,
+          "created_at": "2024-01-15T10:00:00Z"
+        },
+        {
+          "content": "Key differentiator: Simple setup + Advanced AI for SMB market",
+          "memory_type": "SHORT_TERM",
+          "confidence": 0.91,
+          "created_at": "2024-01-15T10:06:45Z"
+        }
+      ]
+    }
+  ],
+  "sample_business_data": {
+    "founder_001": {
+      "company_profile": {
+        "company_name": "TechStart Solutions",
+        "founded": "2023-03-15",
+        "headquarters": "San Francisco, CA",
+        "website": "https://techstartsolutions.com",
+        "industry": "B2B SaaS",
+        "sector": "Customer Service Technology",
+        "business_model": "Subscription (SaaS)",
+        "target_market": "Small to Medium Businesses (10-500 employees)"
+      },
+      "financial_data": {
+        "current_mrr": 15000,
+        "previous_mrr": 13043,
+        "growth_rate": 0.15,
+        "burn_rate": 25000,
+        "runway_months": 18,
+        "cash_on_hand": 450000,
+        "revenue_projection": {
+          "q1_2024": 45000,
+          "q2_2024": 65000,
+          "q3_2024": 95000,
+          "q4_2024": 140000
+        }
+      },
+      "team_data": {
+        "total_employees": 8,
+        "founders": 2,
+        "engineering": 4,
+        "sales_marketing": 1,
+        "operations": 1,
+        "hiring_plan": {
+          "q1_2024": ["Senior Engineer", "Product Manager"],
+          "q2_2024": ["Sales Rep", "Customer Success Manager"],
+          "q3_2024": ["Marketing Manager", "Data Scientist"]
+        }
+      },
+      "product_metrics": {
+        "total_customers": 45,
+        "enterprise_customers": 8,
+        "smb_customers": 37,
+        "churn_rate": 0.15,
+        "nps_score": 72,
+        "feature_adoption": {
+          "ai_responses": 0.89,
+          "analytics_dashboard": 0.67,
+          "integrations": 0.54
+        }
+      },
+      "market_analysis": {
+        "tam": "15B",
+        "sam": "3.2B", 
+        "som": "180M",
+        "market_growth_rate": 0.22,
+        "key_trends": [
+          "Increased demand for automation",
+          "SMB digital transformation",
+          "AI adoption in customer service",
+          "Remote work driving digital tools"
+        ]
+      }
+    }
+  },
+  "sample_funding_applications": [
+    {
+      "application_id": "app_001",
+      "user_id": "founder_001",
+      "company_name": "TechStart Solutions",
+      "funding_amount": 2000000,
+      "funding_round": "Series A",
+      "business_plan": "TechStart Solutions is revolutionizing customer service for small and medium businesses through our AI-powered automation platform. Our solution reduces response times by 80% while maintaining high customer satisfaction scores. We've achieved product-market fit with 45 customers, $15k MRR, and 85% retention rate. The customer service automation market is growing at 22% annually, with SMBs representing a $3.2B opportunity. Our team of 8 includes experienced engineers from Google and Salesforce, plus business leaders with deep SMB market knowledge. We're seeking $2M Series A to scale our engineering team, expand our sales organization, and capture market share in the rapidly growing AI customer service space.",
+      "team_experience": "Our founding team brings together 25+ years of experience in AI, customer service technology, and SMB sales. CEO Sarah Johnson previously led product development at Zendesk and has deep expertise in customer service workflows. CTO David Kim was a senior AI engineer at Google, specializing in natural language processing and machine learning systems. Our engineering team includes former employees from Salesforce, Intercom, and successful startups. Our business team has extensive experience in SMB sales and customer success, having scaled multiple SaaS companies from startup to $10M+ ARR.",
+      "market_size": "The global customer service automation market is valued at $15B and growing at 22% annually. The SMB segment represents $3.2B of this market, with particularly strong growth in AI-powered solutions. Key market drivers include: (1) Labor shortage driving automation adoption, (2) SMBs digitalizing customer interactions, (3) Increased customer expectations for 24/7 support, (4) Cost pressure requiring efficiency gains. Our addressable market includes 2M+ SMBs in North America that currently use basic customer service tools and are ready to upgrade to AI-powered solutions.",
+      "revenue": 15000,
+      "customers": 45,
+      "growth_rate": 15,
+      "competition": "We compete with established players like Zendesk, Intercom, and Freshworks, but differentiate through our SMB-focused approach and superior AI capabilities. Legacy solutions are complex to implement and expensive for smaller businesses. Newer AI chatbot companies lack the comprehensive platform approach that SMBs need. Our key advantages: (1) 10x faster implementation than competitors, (2) 50% lower total cost of ownership, (3) AI that actually understands context and provides accurate responses, (4) Built specifically for SMB workflows and constraints.",
+      "use_of_funds": "The $2M Series A funding will be allocated as follows: (1) Engineering (60% - $1.2M): Hire 6 senior engineers and 2 product managers to accelerate product development and AI capabilities, (2) Sales & Marketing (25% - $500K): Build inside sales team, expand marketing programs, and develop channel partnerships, (3) Operations (10% - $200K): Scale customer success, implement enterprise security, and build operational infrastructure, (4) Working Capital (5% - $100K): General corporate purposes and contingency. This funding will help us reach $100K MRR and 200+ customers within 18 months.",
+      "business_stage": "growth",
+      "team_size": 8,
+      "submitted_at": "2024-01-15T14:30:00Z"
+    }
+  ],
+  "sample_daily_plans": [
+    {
+      "plan_id": "plan_001",
+      "user_id": "founder_001",
+      "date": "2024-01-16",
+      "priorities": [
+        "Finalize Series A pitch deck",
+        "Review Q4 financial metrics",
+        "Interview senior engineer candidate",
+        "Customer success team meeting"
+      ],
+      "available_time": "8 hours",
+      "energy_level": "high",
+      "upcoming_deadlines": [
+        "Investor presentation on Friday",
+        "Board meeting next week"
+      ],
+      "generated_plan": {
+        "action_items": [
+          {
+            "task": "Review and refine competitive landscape slide in pitch deck",
+            "priority": "high",
+            "estimated_time": "90 minutes",
+            "category": "funding",
+            "deadline": "2024-01-19T09:00:00Z"
+          },
+          {
+            "task": "Analyze Q4 customer acquisition costs and LTV metrics",
+            "priority": "high", 
+            "estimated_time": "60 minutes",
+            "category": "analytics",
+            "deadline": "2024-01-19T09:00:00Z"
+          },
+          {
+            "task": "Conduct technical interview with senior engineer candidate",
+            "priority": "medium",
+            "estimated_time": "60 minutes",
+            "category": "hiring",
+            "deadline": "2024-01-16T15:00:00Z"
+          },
+          {
+            "task": "Lead customer success team weekly sync",
+            "priority": "medium",
+            "estimated_time": "45 minutes", 
+            "category": "team",
+            "deadline": "2024-01-16T16:00:00Z"
+          },
+          {
+            "task": "Prepare investor presentation talking points",
+            "priority": "high",
+            "estimated_time": "120 minutes",
+            "category": "funding",
+            "deadline": "2024-01-18T17:00:00Z"
+          }
+        ],
+        "time_blocks": [
+          {
+            "start_time": "09:00",
+            "end_time": "10:30",
+            "activity": "Review and refine competitive landscape slide",
+            "focus_level": "deep"
+          },
+          {
+            "start_time": "10:45",
+            "end_time": "11:45",
+            "activity": "Analyze Q4 metrics",
+            "focus_level": "deep"
+          },
+          {
+            "start_time": "14:00",
+            "end_time": "15:00", 
+            "activity": "Technical interview",
+            "focus_level": "medium"
+          },
+          {
+            "start_time": "15:15",
+            "end_time": "16:00",
+            "activity": "Customer success team meeting",
+            "focus_level": "medium"
+          },
+          {
+            "start_time": "16:15",
+            "end_time": "18:15",
+            "activity": "Prepare investor presentation",
+            "focus_level": "deep"
+          }
+        ],
+        "success_metrics": [
+          "Pitch deck competitive slide completed and reviewed",
+          "Q4 metrics analysis ready for board presentation",
+          "Engineering candidate decision made",
+          "Customer success team aligned on Q1 priorities"
+        ],
+        "motivational_message": "You're in a strong position for Series A with solid metrics and a clear growth trajectory. Today's work on the pitch deck and metrics analysis will set you up for a successful investor presentation. Your focus on both fundraising and team building shows excellent leadership balance."
+      }
+    }
+  ],
+  "sample_knowledge_entries": [
+    {
+      "id": "knowledge_001",
+      "title": "Series A Pitch Deck Best Practices",
+      "content": "Key elements for a successful Series A pitch deck:\n\n1. Problem/Solution (2-3 slides): Clear problem statement with quantified pain points\n2. Market Opportunity (2 slides): TAM/SAM/SOM with growth rates\n3. Product Demo (2-3 slides): Show, don't just tell\n4. Business Model (1 slide): Revenue streams and unit economics\n5. Traction (2-3 slides): Key metrics, customer testimonials, growth trajectory\n6. Competition (1-2 slides): Competitive matrix and differentiation\n7. Team (1-2 slides): Relevant experience and expertise\n8. Financials (2-3 slides): Historical performance and projections\n9. Funding Ask (1 slide): Amount, use of funds, milestones\n10. Appendix: Additional details for Q&A\n\nTiming: 10-12 minutes presentation, 8-10 minutes Q&A\nDesign: Clean, professional, consistent branding\nStorytelling: Logical flow that builds conviction",
+      "category": "funding",
+      "tags": ["series-a", "pitch-deck", "fundraising", "investors"],
+      "created_at": "2024-01-10T12:00:00Z",
+      "updated_at": "2024-01-15T09:30:00Z"
+    },
+    {
+      "id": "knowledge_002", 
+      "title": "SaaS Metrics That Matter for Fundraising",
+      "content": "Critical SaaS metrics investors evaluate:\n\n**Growth Metrics:**\n- MRR/ARR growth rate (aim for 15%+ monthly for early stage)\n- Customer acquisition rate\n- Revenue per customer trends\n\n**Retention Metrics:**\n- Gross revenue retention (aim for 85%+)\n- Net revenue retention (aim for 110%+)\n- Customer churn rate (aim for <5% monthly)\n\n**Unit Economics:**\n- Customer Acquisition Cost (CAC)\n- Lifetime Value (LTV)\n- LTV:CAC ratio (aim for 3:1 or higher)\n- Payback period (aim for <12 months)\n\n**Efficiency Metrics:**\n- Burn rate and runway\n- Revenue per employee\n- Sales efficiency (new ARR / sales & marketing spend)\n\n**Leading Indicators:**\n- Pipeline velocity\n- Trial-to-paid conversion\n- Feature adoption rates\n- Net Promoter Score (NPS)\n\nPresent 12-18 months of historical data plus 12-24 month projections.",
+      "category": "metrics",
+      "tags": ["saas", "metrics", "kpi", "fundraising", "growth"],
+      "created_at": "2024-01-12T14:15:00Z",
+      "updated_at": "2024-01-15T11:20:00Z"
+    }
+  ],
+  "sample_experiments": [
+    {
+      "experiment_id": "exp_001",
+      "name": "Pitch Deck Messaging A/B Test",
+      "description": "Testing two different value proposition messages in the pitch deck opening",
+      "hypothesis": "Emphasizing 'AI-powered' vs 'automation-focused' messaging will impact investor engagement",
+      "variants": {
+        "control": "TechStart Solutions automates customer service for small businesses",
+        "variant_a": "TechStart Solutions uses AI to revolutionize customer service for SMBs"
+      },
+      "metrics": [
+        "Investor meeting requests",
+        "Follow-up questions about technology",
+        "Time spent on product demo slides"
+      ],
+      "status": "running",
+      "start_date": "2024-01-10T00:00:00Z",
+      "end_date": "2024-01-25T00:00:00Z",
+      "results": {
+        "control": {
+          "meeting_requests": 3,
+          "tech_questions": 5,
+          "demo_time_avg": "4.2 minutes"
+        },
+        "variant_a": {
+          "meeting_requests": 7,
+          "tech_questions": 12,
+          "demo_time_avg": "6.8 minutes"
+        }
+      }
+    }
+  ],
+  "sample_batch_queries": {
+    "queries": [
+      {
+        "user_id": "founder_001",
+        "message": "What are the key metrics I should track for Series A fundraising?",
+        "workflow": "general",
+        "expected_topics": ["metrics", "fundraising", "kpi"]
+      },
+      {
+        "user_id": "founder_001", 
+        "message": "Help me create a competitive analysis for my pitch deck",
+        "workflow": "general",
+        "expected_topics": ["competition", "differentiation", "market"]
+      },
+      {
+        "user_id": "founder_002",
+        "message": "What should I focus on to prepare for Series B funding?",
+        "workflow": "general", 
+        "expected_topics": ["series-b", "growth", "scaling"]
+      },
+      {
+        "user_id": "founder_002",
+        "message": "How can I improve our customer retention rate?",
+        "workflow": "general",
+        "expected_topics": ["retention", "customer-success", "churn"]
+      }
+    ]
+  }
+}

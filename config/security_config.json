@@ -1,0 +1,165 @@
+{
+  "security_policies": {
+    "pii_detection": {
+      "enabled": true,
+      "accuracy_threshold": 0.9,
+      "patterns": {
+        "email": {
+          "enabled": true,
+          "severity": "medium",
+          "regex": "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"
+        },
+        "phone": {
+          "enabled": true,
+          "severity": "medium",
+          "regex": "(\\+?1[-\\.\\s]?)?\\(?([0-9]{3})\\)?[-\\.\\s]?([0-9]{3})[-\\.\\s]?([0-9]{4})"
+        },
+        "ssn": {
+          "enabled": true,
+          "severity": "high",
+          "regex": "\\b\\d{3}-?\\d{2}-?\\d{4}\\b"
+        },
+        "credit_card": {
+          "enabled": true,
+          "severity": "critical",
+          "regex": "\\b(?:\\d{4}[-\\s]?){3}\\d{4}\\b"
+        },
+        "ip_address": {
+          "enabled": true,
+          "severity": "medium",
+          "regex": "\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b"
+        },
+        "url": {
+          "enabled": true,
+          "severity": "low",
+          "regex": "https?://(?:[-\\w.])+(?:[:\\d]+)?(?:/(?:[\\w/_.])*(?:\\?(?:[\\w&=%.])*)?(?:#(?:\\w*))?)?"
+        }
+      }
+    },
+    "injection_prevention": {
+      "enabled": true,
+      "accuracy_threshold": 0.8,
+      "patterns": {
+        "sql_injection": {
+          "enabled": true,
+          "severity": "critical",
+          "patterns": [
+            "('|(\\\\'))+.*(;|--|#)",
+            "\\b(union|select|insert|update|delete|drop|create|alter)\\b.*\\b(from|where|table)\\b",
+            "1\\s*=\\s*1|1\\s*=\\s*'1'",
+            "or\\s+1\\s*=\\s*1|and\\s+1\\s*=\\s*1"
+          ]
+        },
+        "command_injection": {
+          "enabled": true,
+          "severity": "critical",
+          "patterns": [
+            "[;&|`$(){}[\\]\\\\]",
+            "\\b(rm|cat|ls|ps|kill|chmod|chown|sudo|su)\\b",
+            "(\\\\x[0-9a-f]{2})+"
+          ]
+        },
+        "script_injection": {
+          "enabled": true,
+          "severity": "high",
+          "patterns": [
+            "<script[^>]*>.*</script>",
+            "javascript:",
+            "on\\w+\\s*=",
+            "<iframe|<object|<embed"
+          ]
+        },
+        "template_injection": {
+          "enabled": true,
+          "severity": "critical",
+          "patterns": [
+            "\\{\\{.*\\}\\}",
+            "\\$\\{.*\\}",
+            "<%.*%>"
+          ]
+        },
+        "path_traversal": {
+          "enabled": true,
+          "severity": "high",
+          "patterns": [
+            "\\.\\./",
+            "\\.\\.\\\\"
+          ]
+        }
+      }
+    },
+    "data_leak_prevention": {
+      "enabled": true,
+      "accuracy_threshold": 0.8,
+      "patterns": {
+        "api_keys": {
+          "enabled": true,
+          "severity": "critical",
+          "patterns": [
+            "sk-[a-zA-Z0-9]{32,}",
+            "AKIA[0-9A-Z]{16}",
+            "AIza[0-9A-Za-z\\\\-_]{35}",
+            "ya29\\.[0-9A-Za-z\\\\-_]+"
+          ]
+        },
+        "database_connections": {
+          "enabled": true,
+          "severity": "critical",
+          "patterns": [
+            "(postgresql|mysql|mongodb)://[^/\\s]+/",
+            "(host|server)\\s*[:=]\\s*[^\\s;]+",
+            "(database|db)\\s*[:=]\\s*[^\\s;]+"
+          ]
+        },
+        "sensitive_data": {
+          "enabled": true,
+          "severity": "high",
+          "patterns": [
+            "\\b(password|passwd|pwd)\\s*[:=]\\s*\\S+",
+            "\\b(token|key)\\s*[:=]\\s*\\S+",
+            "\\b(secret|private)\\s*[:=]\\s*\\S+"
+          ]
+        },
+        "business_data": {
+          "enabled": true,
+          "severity": "medium",
+          "patterns": [
+            "\\$[\\d,]+\\.?\\d*[MKB]?",
+            "\\b\\d+,?\\d*\\s*(users|customers|clients)",
+            "\\b(revenue|profit|loss|earnings)\\b.*\\$"
+          ]
+        }
+      }
+    }
+  },
+  "testing_config": {
+    "overall_threshold": 0.9,
+    "category_thresholds": {
+      "pii_detection": 0.9,
+      "injection_prevention": 0.8,
+      "data_leak_prevention": 0.8
+    },
+    "severity_requirements": {
+      "critical": 0.95,
+      "high": 0.9,
+      "medium": 0.8,
+      "low": 0.7
+    },
+    "test_allocation": {
+      "security_testing_percentage": 0.1,
+      "max_test_runtime_seconds": 300
+    }
+  },
+  "monitoring": {
+    "log_security_events": true,
+    "alert_on_detection": true,
+    "save_test_results": true,
+    "results_retention_days": 30
+  },
+  "compliance": {
+    "gdpr_compliance": true,
+    "hipaa_compliance": false,
+    "pci_compliance": false,
+    "sox_compliance": false
+  }
+}

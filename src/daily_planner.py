@@ -5,6 +5,7 @@ Chains Planner, Tool-Caller, and Coach agents for personalized action plan gener
 
 import json
 import logging
+from logging_manager import get_logging_manager, LogLevel, LogCategory
 import time
 import asyncio
 from pathlib import Path
@@ -119,6 +120,43 @@ class DailyPlan:
         }
 
 
+async def create_sample_planning_input() -> DailyPlanningInput:
+    """Create sample planning input for testing."""
+    return DailyPlanningInput(
+        user_id="test_user_001",
+        current_priorities=[
+            "Review quarterly business metrics",
+            "Prepare investor update presentation", 
+            "Team standup meeting",
+            "Product roadmap planning session"
+        ],
+        available_time="8 hours",
+        energy_level="high",
+        upcoming_deadlines=["Board meeting next week", "Product launch in 2 weeks"],
+        recent_accomplishments=[
+            "Closed 3 new customer deals",
+            "Hired senior developer",
+            "Completed user research study"
+        ],
+        focus_areas=["product", "business", "team"],
+        meeting_schedule=[
+            {"time": "10:00 AM", "title": "Team standup", "duration": "30 minutes"},
+            {"time": "2:00 PM", "title": "Customer call", "duration": "1 hour"}
+        ],
+        personal_goals=[
+            "Launch MVP by end of quarter",
+            "Raise Series A funding",
+            "Build team to 15 people"
+        ],
+        business_context={
+            "stage": "early_stage",
+            "industry": "fintech",
+            "team_size": 8,
+            "monthly_revenue": 15000
+        }
+    )
+
+
 class DailyPlanningWorkflow:
     """Daily planning workflow orchestrator."""
     
@@ -135,7 +173,7 @@ class DailyPlanningWorkflow:
         """
         self.orchestrator = orchestrator
         self.data_sources_path = Path(data_sources_path)
-        self.logger = logging.getLogger(__name__)
+        self.logger = get_logging_manager().get_logger(__name__.split(".")[-1], LogCategory.SYSTEM)
         
         # Ensure data directory exists
         self.data_sources_path.mkdir(parents=True, exist_ok=True)
@@ -231,6 +269,10 @@ class DailyPlanningWorkflow:
             
             # Validate that required agents were executed
             agent_outputs = workflow_result.result_data.get("agent_outputs", {})
+            self.logger.debug(f"Received agent outputs: {list(agent_outputs.keys())}")
+            self.logger.debug(f"Workflow result success: {workflow_result.success}")
+            self.logger.debug(f"Workflow confidence: {workflow_result.confidence_score}")
+            
             if not self._validate_agent_chain_execution(agent_outputs):
                 self.logger.warning("Not all required agents executed in daily planning workflow")
             
@@ -419,12 +461,53 @@ class DailyPlanningWorkflow:
         
         # Create action items from planner output
         action_items = []
-        for item in planner_output.get("action_items", []):
+        raw_action_items = planner_output.get("action_items", [])
+        
+        # If no action items from planner, create from planning input
+        if not raw_action_items and planning_input.current_priorities:
+            for priority in planning_input.current_priorities:
+                raw_action_items.append({
+                    "title": priority,
+                    "description": f"Work on: {priority}",
+                    "priority": "medium",
+                    "timeline": "1 hour"
+                })
+        
+        # Process tool caller results to enhance action items
+        tool_results = tool_caller_output.get("tool_results", [])
+        priority_optimization = {}
+        time_estimates = {}
+        
+        for result in tool_results:
+            if result.get("tool") == "priority_optimizer" and result.get("success"):
+                optimized_tasks = result.get("result", {}).get("optimized_tasks", [])
+                for task in optimized_tasks:
+                    task_title = task.get("task", {}).get("title", "")
+                    if task_title:
+                        priority_optimization[task_title] = task.get("priority", "medium")
+            
+            if result.get("tool") == "time_estimator" and result.get("success"):
+                time_estimates_list = result.get("result", {}).get("time_estimates", [])
+                for estimate in time_estimates_list:
+                    task_title = estimate.get("task", {}).get("title", "")
+                    if task_title:
+                        time_estimates[task_title] = estimate.get("estimated_time", "30 minutes")
+        
+        # Create enhanced action items
+        for item in raw_action_items:
+            title = item.get("title", "")
+            
+            # Use tool-optimized priority if available
+            priority = priority_optimization.get(title, item.get("priority", "medium"))
+            
+            # Use tool-estimated time if available
+            estimated_time = time_estimates.get(title, item.get("timeline", "30 minutes"))
+            
             action_item = ActionItem(
-                title=item.get("title", ""),
+                title=title,
                 description=item.get("description", ""),
-                priority=item.get("priority", "medium"),
-                estimated_time=item.get("timeline", "30 minutes"),
+                priority=priority,
+                estimated_time=estimated_time,
                 category=self._categorize_action_item(item),
                 tools_needed=item.get("resources_needed", []),
                 success_criteria=self._generate_success_criteria(item)
@@ -434,6 +517,11 @@ class DailyPlanningWorkflow:
         # Generate time blocks
         time_blocks = self._generate_time_blocks(action_items, planning_input)
         
+        # Extract coaching message
+        coaching_message = coach_output.get("message", "")
+        if not coaching_message:
+            coaching_message = "Stay focused on your priorities and make steady progress today!"
+        
         # Create daily plan
         daily_plan = DailyPlan(
             plan_id=f"plan_{planning_input.user_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
@@ -441,8 +529,8 @@ class DailyPlanningWorkflow:
             date=datetime.now().strftime("%Y-%m-%d"),
             action_items=action_items,
             time_blocks=time_blocks,
-            motivational_message=coach_output.get("message", ""),
-            success_metrics=planner_output.get("success_metrics", []),
+            motivational_message=coaching_message,
+            success_metrics=planner_output.get("success_metrics", ["Complete high-priority tasks", "Maintain good energy"]),
             contingency_plans=self._generate_contingency_plans(action_items),
             coaching_insights=self._extract_coaching_insights(coach_output),
             estimated_completion_time=self._calculate_total_time(action_items),
@@ -843,4 +931,96 @@ async def test_daily_planning_workflow():
 
 if __name__ == "__main__":
     # Run test
-    asyncio.run(test_daily_planning_workflow())
+    asyncio.run(test_daily_planning_workflow())    
+
+    async def execute_parallel_planning(
+        self,
+        planning_inputs: List[DailyPlanningInput],
+        max_workers: int = 3
+    ) -> List[Tuple[DailyPlan, WorkflowResult]]:
+        """Execute parallel daily planning for multiple users.
+        
+        Supports parallel task processing under 1-minute completion time.
+        
+        Args:
+            planning_inputs: List of planning inputs for different users
+            max_workers: Maximum number of parallel workers
+            
+        Returns:
+            List of tuples containing (DailyPlan, WorkflowResult) for each input
+        """
+        self.logger.info(f"Starting parallel planning for {len(planning_inputs)} users with {max_workers} workers")
+        
+        # Use ThreadPoolExecutor for parallel execution
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # Create tasks for parallel execution
+            tasks = []
+            for planning_input in planning_inputs:
+                task = asyncio.create_task(
+                    self.generate_daily_plan(planning_input)
+                )
+                tasks.append(task)
+            
+            # Wait for all tasks to complete
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+        
+        # Process results and handle exceptions
+        processed_results = []
+        for i, result in enumerate(results):
+            if isinstance(result, Exception):
+                # Create fallback result for failed planning
+                fallback_plan = self._create_fallback_plan(planning_inputs[i])
+                fallback_result = WorkflowResult(
+                    success=False,
+                    result_data={"error": str(result)},
+                    execution_time=0.0,
+                    agent_logs=[],
+                    confidence_score=0.0
+                )
+                processed_results.append((fallback_plan, fallback_result))
+                self.logger.error(f"Parallel planning failed for user {planning_inputs[i].user_id}: {result}")
+            else:
+                processed_results.append(result)
+        
+        self.logger.info(f"Parallel planning completed for {len(processed_results)} users")
+        return processed_results
+    
+    async def _save_daily_plan(self, daily_plan: DailyPlan) -> bool:
+        """Save daily plan to local storage.
+        
+        Args:
+            daily_plan: Daily plan to save
+            
+        Returns:
+            True if saved successfully, False otherwise
+        """
+        try:
+            # Create plans directory
+            plans_dir = Path("data/business_data/daily_plans")
+            plans_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Save plan as JSON file
+            plan_file = plans_dir / f"{daily_plan.plan_id}.json"
+            with open(plan_file, 'w', encoding='utf-8') as f:
+                json.dump(daily_plan.to_dict(), f, indent=2, default=str)
+            
+            self.logger.debug(f"Daily plan saved to {plan_file}")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Failed to save daily plan {daily_plan.plan_id}: {e}")
+            return False
+    
+    def get_performance_metrics(self) -> Dict[str, Any]:
+        """Get performance metrics for the daily planning workflow."""
+        avg_time = self.total_planning_time / max(1, self.planning_count)
+        
+        return {
+            "total_plans_generated": self.planning_count,
+            "average_planning_time": avg_time,
+            "total_planning_time": self.total_planning_time,
+            "completion_rates": self.completion_rates,
+            "performance_target_met": avg_time < 60.0,  # Under 1 minute target
+            "target_completion_time": 60.0,
+            "performance_ratio": min(1.0, 60.0 / max(avg_time, 1.0))
+        }

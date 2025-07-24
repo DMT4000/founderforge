@@ -48,46 +48,31 @@ class Settings:
         """Get FAISS index storage path."""
         return self.data_dir / "faiss_index"
     
-    # Feature Flags
+    # Feature Flags (delegated to FeatureFlagManager)
+    @property
+    def feature_flag_manager(self):
+        """Get the feature flag manager instance."""
+        # Import here to avoid circular imports
+        from src.feature_flag_manager import get_feature_flag_manager
+        return get_feature_flag_manager()
+    
     def load_feature_flags(self) -> Dict[str, Any]:
         """Load feature flags from JSON configuration."""
-        feature_flags_path = self.config_dir / "feature_flags.json"
-        
-        if not feature_flags_path.exists():
-            # Create default feature flags
-            default_flags = {
-                "enable_memory_system": True,
-                "enable_multi_agent": True,
-                "enable_context_summarization": True,
-                "enable_confidence_fallback": True,
-                "enable_git_versioning": True,
-                "enable_security_filters": True,
-                "max_context_tokens": 16000,
-                "confidence_threshold": 0.8,
-                "memory_retention_days": 30
-            }
-            self.save_feature_flags(default_flags)
-            return default_flags
-        
-        with open(feature_flags_path, 'r') as f:
-            return json.load(f)
+        return self.feature_flag_manager.get_all_flags()
     
     def save_feature_flags(self, flags: Dict[str, Any]) -> None:
         """Save feature flags to JSON configuration."""
-        feature_flags_path = self.config_dir / "feature_flags.json"
-        with open(feature_flags_path, 'w') as f:
-            json.dump(flags, f, indent=2)
+        # This method is deprecated - use feature_flag_manager.set_flag() instead
+        for flag_name, value in flags.items():
+            self.feature_flag_manager.set_flag(flag_name, value, "settings", "Bulk update via save_feature_flags")
     
     def get_feature_flag(self, flag_name: str, default: Any = False) -> Any:
         """Get a specific feature flag value."""
-        flags = self.load_feature_flags()
-        return flags.get(flag_name, default)
+        return self.feature_flag_manager.get_flag(flag_name, default)
     
     def update_feature_flag(self, flag_name: str, value: Any) -> None:
         """Update a specific feature flag."""
-        flags = self.load_feature_flags()
-        flags[flag_name] = value
-        self.save_feature_flags(flags)
+        self.feature_flag_manager.set_flag(flag_name, value, "settings", f"Updated via settings.update_feature_flag")
 
 # Global settings instance
 settings = Settings()
